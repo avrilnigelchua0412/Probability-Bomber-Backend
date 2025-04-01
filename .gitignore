@@ -1,5 +1,5 @@
 key/*
-
+*.env
 # Logs
 logs
 *.log

@@ -1,26 +1,96 @@
+const bcrypt = require("bcryptjs"); // For password hashing
+const jwt = require("jsonwebtoken"); // For generating tokens
+
+require('dotenv').config();
+const secretKey = process.env.JWT_SECRET;
+console.log("Secret Key! ", secretKey);
+
 const express = require('express');
 const router = express.Router();
-const { db_helper } = require('../config/firebase');
-const { QuerySnapshot } = require('firebase-admin/firestore');
+const { admin, db_helper } = require('../config/firebase');
+const { FieldValue , QuerySnapshot } = require('firebase-admin/firestore');
 
 // Create User
-router.post('/create', async (req, res) => {
+router.post('/register', async (req, res) => {
     try {
-        if (!req.body.name || !req.body.email || !req.body.hashed_password) {
-            return res.status(400).send({ error: "Missing required fields" }); // 400 Bad Request
+        const { name, email, password } = req.body;
+        const createdAt = FieldValue.serverTimestamp();
+        if (!email) {
+            return res.status(400).send({ error: "Missing required email"}); // 400 Bad Request
         }
-        const newUserRef = db_helper.collection("users").doc()
+        if (!name) {
+            return res.status(400).send({ error: "Missing required name"}); // 400 Bad Request
+        }
+        if (!password) {
+            return res.status(400).send({ error: "Missing required password"}); // 400 Bad Request
+        }
+
+        // Check if user already exists
+        const usersRef = db_helper.collection("users");
+        const querySnapshot = await usersRef.where("email", "==", email).get();
+
+        if (!querySnapshot.empty) {
+            return res.status(409).json({ error: "Email is already registered" }); // 409 Conflict
+        }
         
+        // Hash password before saving
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Generate a unique user ID
+        const newUserRef = usersRef.doc(); // Auto-generate ID
+
         await newUserRef.set({
-                id : newUserRef.id,
-                username: req.body.name,
-                email: req.body.email,
-                hashed_password: req.body.hashed_password
-            });
+            id: newUserRef.id,
+            name: name, 
+            email: email,
+            password: hashedPassword,
+            createdAt: createdAt
+        });
         
         res.status(201).send({ message: "User created successfully!" }); // 201 Created
     } catch (error) {
         res.status(500).send({ error: error.message }); // 500 Internal Server Error
+    }
+});
+
+router.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // console.log(email, password)
+
+        if (!email){
+            return res.status(400).json({ error: "Missing email" });
+        }
+        if(!password){
+            return res.status(400).json({ error: "Missing password" });
+        }
+
+        // Check if user already exists
+        const usersRef = db_helper.collection("users");
+        const query_snapshot = await usersRef.where("email", "==", email).get()
+
+        if (query_snapshot.empty) {
+            return res.status(401).json({ error: "Invalid credentials" });
+        }
+
+        let user;
+        query_snapshot.forEach((doc) => {
+            user = doc.data();
+        });
+
+        // Compare hashed password
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if (!passwordMatch) {
+            return res.status(401).json({ error: "Invalid credentials" });
+        }
+
+        // // Generate JWT Token
+        const token = jwt.sign({ email: user.email }, secretKey, { expiresIn: "1h" });
+
+        return res.status(200).json({ message: "Login successful", token });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 });
 
