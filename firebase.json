@@ -14,5 +14,23 @@
         "npm --prefix \"$RESOURCE_DIR\" run lint"
       ]
     }
-  ]
+  ],
+  "emulators": {
+    "hub": {
+      "host": "localhost",
+      "port": 4400
+    },
+    "ui": {
+      "host": "localhost",
+      "port": 4000
+    },
+    "logging": {
+      "host": "localhost",
+      "port": 4500
+    },
+    "functions": {
+      "host": "localhost",
+      "port": 5001
+    }
+  }
 }
