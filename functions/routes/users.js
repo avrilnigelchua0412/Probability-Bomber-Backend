@@ -5,8 +5,8 @@ const express = require('express');
 const router = express.Router();
 
 const { admin, auth, dbHelper, secretKey } = require('../config/firebase');
-const authenticate = require('../middleware/auth')
-console.log("Authenticate inside 'users': ", authenticate)
+// const authenticate = require('../middleware/auth')
+// console.log("Authenticate inside 'users': ", authenticate)
 
 const { FieldValue , QuerySnapshot } = require('firebase-admin/firestore');
 const { getAuth } = require('firebase-admin/auth');
@@ -69,9 +69,27 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.get('/user-profile', authenticate, async (req, res) => {
+// router.get('/user-profile', authenticate, async (req, res) => {
+router.get('/user-profile', async (req, res) => {
     try {
-        res.json({ message: "Authenticated!", user: req.user });
+        console.log("UID: ", req.uid)
+        
+        const userRef = dbHelper.collection('users').doc(req.uid);
+        const userDoc = await userRef.get()
+
+        if(!userDoc){
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        const userData = userDoc.data()
+        res.json({ 
+            message: "Authenticated!", 
+            user: { 
+                email: userData.email, 
+                name: userData.name 
+            } 
+        });
+
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

@@ -12,7 +12,7 @@ if (!admin.apps.length) { // Prevents re-initialization error
       credential: admin.credential.cert(serviceAccount),
       databaseURL: "https://fir-crud-restapi-6a058-default-rtdb.asia-southeast1.firebasedatabase.app"
     });
-}
+};
 
 // console.log("🔥 Admin Initialized:", !!admin.apps.length);
 // console.log("📂 Service Account Loaded:", serviceAccount ? "Yes" : "No");
