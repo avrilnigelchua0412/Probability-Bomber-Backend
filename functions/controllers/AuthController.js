@@ -20,17 +20,17 @@ class AuthController {
         }
     }
 
-    static async login(req, res){
-        try {
-            const { email } = req.body;
-            const userRecord = await getAuth().getUserByEmail(email);
-            const token = await AuthService.generateToken(userRecord.uid);
-
-            res.status(200).json({ message : "Login successful", token : token });
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
+    // static async login(req, res){
+    //     try {
+    //         const { email, password } = req.body;
+    //         await AuthService.loginUser(email, password);
+    //         const token = await AuthService.generateToken(userRecord.uid);
+    //         console.log("Login successful, Token:", token);
+    //         res.status(200).json({ message: "Login successful", token: token });
+    //     } catch (error) {
+    //         res.status(500).json({ error: error.message });
+    //     }
+    // }
 
     static async forgetPassword(req, res) {
         try {
@@ -40,6 +40,22 @@ class AuthController {
             res.status(200).json({ message: "Password reset email sent successfully.", resetLink });
         } catch (error) {
             res.status(500).send({ error: error.message });
+        }
+    }
+
+    static async resetPassword(req, res){
+        try {
+            const { newPassword } = req.body
+            // Dependency Injection
+            console.log("UID: ", req.uid);
+            const result = await AuthService.updatePassword(req.uid, newPassword);
+            if (result) {
+                res.status(200).json({ message: "Password updated successfully!" });
+              } else {
+                res.status(400).json({ error: "Failed to update password" });
+              }
+        } catch (error) {
+            res.status(500).send({ error: error.message }); 
         }
     }
 }

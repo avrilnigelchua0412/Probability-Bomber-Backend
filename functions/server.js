@@ -5,6 +5,7 @@ const { secretKey } = require("./config"); // Import secret key
 const authenticate = require("./middlewares/authMiddleware"); // Auth middleware
 const userRoutes = require("./routes/UserRoutes"); // User routes
 const authRoutes = require("./routes/AuthRoutes"); // User routes
+const { Message } = require("firebase-functions/pubsub");
 
 const app = express();
 app.use(express.json()); // Middleware to parse JSON
@@ -35,6 +36,7 @@ app.use((req, res, next) => {
     console.log("Path: ", req.path)
     if (req.path === "/api/auth/register/") return next();
     if (req.path === "/api/auth/login/") return next();
+    if (req.path === "/") return next();
     authenticate(req, res, next);
 });
 
@@ -58,7 +60,9 @@ app.use("/api/user", userRoutes);
 
 // Default route
 app.get('/', (req, res) => {
-    res.status(200).send("Hello World");
+    res.status(200).send({
+        message: "Hello World"
+    });
 });
 
 module.exports = app; // Export app for Firebase functions
