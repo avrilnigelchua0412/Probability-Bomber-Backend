@@ -1,16 +1,16 @@
 const express = require("express");
 const cors = require("cors");
 const { dbHelper, auth } = require("./dbHelper"); // Import Firestore & Auth
-const { secretKey } = require("./config"); // Import secret key
+// const { secretKey } = require("./config"); // Import secret key
 const authenticate = require("./middlewares/authMiddleware"); // Auth middleware
 const userRoutes = require("./routes/UserRoutes"); // User routes
 const authRoutes = require("./routes/AuthRoutes"); // User routes
-const { Message } = require("firebase-functions/pubsub");
+// const { Message } = require("firebase-functions/pubsub");
 
 const app = express();
 app.use(express.json()); // Middleware to parse JSON
 
-console.log("Secret Key:", secretKey); // Check if secret key loads correctly
+// console.log("Secret Key:", secretKey); // Check if secret key loads correctly
 
 // Debugging!
 app.use((req, res, next) => {
@@ -35,7 +35,6 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
     console.log("Path: ", req.path)
     if (req.path === "/api/auth/register/") return next();
-    if (req.path === "/api/auth/login/") return next();
     if (req.path === "/") return next();
     authenticate(req, res, next);
 });

@@ -20,17 +20,15 @@ class AuthController {
         }
     }
 
-    // static async login(req, res){
-    //     try {
-    //         const { email, password } = req.body;
-    //         await AuthService.loginUser(email, password);
-    //         const token = await AuthService.generateToken(userRecord.uid);
-    //         console.log("Login successful, Token:", token);
-    //         res.status(200).json({ message: "Login successful", token: token });
-    //     } catch (error) {
-    //         res.status(500).json({ error: error.message });
-    //     }
-    // }
+    static async login(req, res){
+        try {
+            const userData = await UserRepository.getUserId(req.uid);
+            // console.log("Token: ", req.token)
+            res.status(200).json({ message: "Login successful", userData: userData });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
 
     static async forgetPassword(req, res) {
         try {
@@ -47,7 +45,11 @@ class AuthController {
         try {
             const { newPassword } = req.body
             // Dependency Injection
-            console.log("UID: ", req.uid);
+            console.log("Token: ", req.token)
+            const uid = req.uid; // Get the uid from the request object
+            if (!uid) {
+              return res.status(400).json({ error: "User ID not found" });
+            }
             const result = await AuthService.updatePassword(req.uid, newPassword);
             if (result) {
                 res.status(200).json({ message: "Password updated successfully!" });
