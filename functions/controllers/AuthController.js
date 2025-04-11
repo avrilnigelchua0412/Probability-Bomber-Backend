@@ -1,18 +1,16 @@
 const AuthService = require("../services/AuthService");
-const UserModel = require("../models/UserModel");
+const UserFactory = require('../factory/UserFactory');
 const UserRepository = require("../repositories/UserRepository");
+const Validator = require("../middlewares/Validator")
 const { FieldValue } = require("firebase-admin/firestore");
-const { getAuth } = require("firebase-admin/auth");
 
 class AuthController {
     static async register(req, res){
         try {
-            const { name, email, password } = req.body;
+            const { name, email, password, role } = req.body;
             const createdAt = FieldValue.serverTimestamp();
-
             const userRecord = await AuthService.registerUser(email, password);
-            const newUser = new UserModel(userRecord.uid, name, email, createdAt);
-
+            const newUser = UserFactory.instantiateUser(userRecord.uid, name, email, createdAt, role);
             await UserRepository.createUser(userRecord.uid, newUser);
             res.status(201).send({ message: "User created successfully!" }); // 201 Created
         } catch (error) {
@@ -23,7 +21,7 @@ class AuthController {
     static async login(req, res){
         try {
             const userData = await UserRepository.getUserId(req.uid);
-            // console.log("Token: ", req.token)
+            console.log("Backend Token: ", req.token)
             res.status(200).json({ message: "Login successful", userData: userData });
         } catch (error) {
             res.status(500).json({ error: error.message });
