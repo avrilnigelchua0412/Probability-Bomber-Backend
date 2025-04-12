@@ -21,4 +21,5 @@ class UserModel {
         return this.role;
     }
 }
+
 module.exports = UserModel;

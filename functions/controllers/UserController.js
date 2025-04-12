@@ -4,7 +4,7 @@ class UserController {
     static async getUserProfile(req, res){
         try {
             console.log("UID: ", req.uid);
-            const userData = await UserRepository.getUserId(req.uid);
+            const userData = await UserRepository.getUserData(req.uid);
 
             if(!userData){
                 // Enclosed in a if block, since "res" is not detected as Response Object

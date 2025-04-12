@@ -12,7 +12,7 @@ class AuthController {
             const userRecord = await AuthService.registerUser(email, password);
             const newUser = UserFactory.instantiateUser(userRecord.uid, name, email, createdAt, role);
             await UserRepository.createUser(userRecord.uid, newUser);
-            res.status(201).send({ message: "User created successfully!" }); // 201 Created
+            res.status(201).send({ message: `${role} created successfully!` }); // 201 Created
         } catch (error) {
             res.status(500).send({ error: error.message });
         }
@@ -20,7 +20,8 @@ class AuthController {
 
     static async login(req, res){
         try {
-            const userData = await UserRepository.getUserId(req.uid);
+            const { role } = req.body;
+            const userData = await UserRepository.getUserData(req.uid, role);
             console.log("Backend Token: ", req.token)
             res.status(200).json({ message: "Login successful", userData: userData });
         } catch (error) {

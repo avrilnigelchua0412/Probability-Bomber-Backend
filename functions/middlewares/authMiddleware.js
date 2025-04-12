@@ -15,7 +15,8 @@ class Authenticator {
 
         admin.auth().verifyIdToken(token)
             .then(decodedToken => {
-                req.uid = decodedToken.uid; // Attach UID to request
+                // console.log("Decoded Token: ", decodedToken)
+                req.uid = decodedToken.uid;  // Attach UID to request
                 req.token = token;           // Attach token to request
                 next();                      // Proceed
             })

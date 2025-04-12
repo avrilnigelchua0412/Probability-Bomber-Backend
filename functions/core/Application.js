@@ -4,6 +4,7 @@ const StaticVariable = require('../config/StaticVariable');
 const Authenticator = require("../middlewares/AuthMiddleware");
 const userRoutes = require("../routes/UserRoutes");
 const authRoutes = require("../routes/AuthRoutes"); 
+const teacherRoutes = require("../routes/TeacherRoutes");
 
 class Application{
     constructor(){
@@ -22,14 +23,17 @@ class Application{
         }));
 
         this.app.use((req, res, next) => {
-            if (StaticVariable.publicPaths.includes(req.path))
+            console.log("Path: ", req.path)
+            if (StaticVariable.publicPaths.includes(req.path)){
                 return next();
+            }
             Authenticator.authenticate(req, res, next);
         });
     }
     setupRoutes() {
         this.app.use(StaticVariable.authPath, authRoutes);
         this.app.use(StaticVariable.userPath, userRoutes);
+        this.app.use(StaticVariable.teacherPath, teacherRoutes);
     }
 
     setupDefaultRoute() {

@@ -1,27 +1,27 @@
 const admin = require("firebase-admin");
 const serviceAccount = require("../../firebase-key/permissions.json");
+const StaticVariable = require("./StaticVariable")
 
 class FirebaseService {
-    static #appInstance = null;
-
-    static init() {
-        if (!FirebaseService.#appInstance) {
-            FirebaseService.#appInstance = admin.initializeApp({
+    constructor() {
+        if (!admin.apps.length) {
+            admin.initializeApp({
                 credential: admin.credential.cert(serviceAccount),
-                databaseURL: "https://fir-crud-restapi-6a058-default-rtdb.asia-southeast1.firebasedatabase.app"
+                databaseURL: StaticVariable.databaseURL
             });
         }
+
+        this.db = admin.firestore();
+        this.auth = admin.auth();
     }
 
-    static get db() {
-        FirebaseService.init();
-        return admin.firestore();
+    getDB() {
+        return this.db;
     }
 
-    static get auth() {
-        FirebaseService.init();
-        return admin.auth();
+    getAuth() {
+        return this.auth;
     }
 }
 
-module.exports = FirebaseService;
+module.exports = new FirebaseService();
