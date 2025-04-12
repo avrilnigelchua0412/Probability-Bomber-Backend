@@ -1,5 +1,3 @@
-const FirebaseService = require("../config/FirebaseService");
-const ClassModel = require("../models/Class/ClassModel");
 const ClassRepository = require("../repositories/ClassRepository");
 const StudentRepository = require("../repositories/StudentRepository");
 const TeacherRepository = require("../repositories/TeacherRepository");
@@ -32,6 +30,8 @@ class TeacherController {
             const studentUids = classData.studentUids || [];
 
             if (!studentUids.includes(studentUid)) {
+                await StudentRepository.addClass(studentUid, classId)
+
                 studentUids.push(studentUid);
                 await classRef.update({ studentUids });
             }
@@ -49,6 +49,8 @@ class TeacherController {
             const { studentUid, classData, classRef } = await TeacherController.studentUidAndClassData(classId, emailOrName);
     
             const updatedUids = (classData.studentUids || []).filter(uid => uid !== studentUid);
+            
+            await StudentRepository.removeClass(studentUid);
             await classRef.update({ studentUids: updatedUids });
 
             res.status(200).json({ message: "Student removed from class." });
