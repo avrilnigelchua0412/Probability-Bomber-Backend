@@ -1,11 +1,23 @@
 const express = require("express");
 const AuthController = require("../controllers/AuthController");
+const Validator = require("../middlewares/Validator")
 
-const router = express.Router();
+class AuthRoutes {
+    constructor() {
+        this.router = express.Router();
+        this.registerRoutes();
+    }
 
-router.post("/register", AuthController.register);
-router.post("/login", AuthController.login);
-router.post("/forget_password", AuthController.forgetPassword);
-router.post("/reset_password", AuthController.resetPassword);
+    registerRoutes() {
+        this.router.post("/register", Validator.validateUser, AuthController.register);
+        this.router.post("/login", AuthController.login);
+        this.router.post("/forget_password", AuthController.forgetPassword);
+        this.router.post("/reset_password", AuthController.resetPassword);
+    }
 
-module.exports = router;
+    getRouter() {
+        return this.router;
+    }
+}
+
+module.exports = new AuthRoutes().getRouter();

@@ -1,9 +1,16 @@
 const express = require("express");
 const UserController = require("../controllers/UserController");
-// const authenticate = require("../middlewares/authMiddleware");
 
-const router = express.Router();
-// router.get("/user-profile", authenticate, UserController.getUserProfile);
-router.get("/user-profile", UserController.getUserProfile);
-
-module.exports = router;
+class UserRoutes {
+    constructor() {
+        this.router = express.Router();
+        this.registerRoutes();
+    }
+    registerRoutes() {
+        this.router.get("/user-profile", UserController.getUserProfile);
+    }
+    getRouter() {
+        return this.router;
+    }
+}
+module.exports = new UserRoutes().getRouter();

@@ -1,4 +1,5 @@
 const { onRequest } = require("firebase-functions/v2/https");
-const app = require("./server");
+const Application = require("./core/Application");
 
-exports.app = onRequest(app);
+const appInstance = new Application().getInstance();
+exports.app = onRequest(appInstance);
