@@ -1,4 +1,5 @@
 const ClassRepository = require("../repositories/ClassRepository");
+const HelperRepository = require("../repositories/HelperRepository");
 const StudentRepository = require("../repositories/StudentRepository");
 const TeacherRepository = require("../repositories/TeacherRepository");
 class TeacherController {
@@ -15,17 +16,10 @@ class TeacherController {
         }
     }
 
-    static async studentUidAndClassData(classId, emailOrName) {
-        const studentUid = await StudentRepository.findStudentUidByEmailOrUsername(emailOrName);
-        const classData = await ClassRepository.getClassData(classId);
-        const classRef = await ClassRepository.getClassDocument(classId); // Get doc ref
-        return { studentUid, classData, classRef };
-    }
-
     static async addStudentToClass(req, res) {
         try {
             const { classId, emailOrName } = req.body;
-            const { studentUid, classData, classRef } = await TeacherController.studentUidAndClassData(classId, emailOrName);
+            const { studentUid, classData, classRef } = await HelperRepository.studentUidAndClassData(classId, emailOrName);
     
             const studentUids = classData.studentUids || [];
 
@@ -46,7 +40,7 @@ class TeacherController {
     static async removeStudentFromClass(req, res) {
         try {
             const { classId, emailOrName } = req.body;
-            const { studentUid, classData, classRef } = await TeacherController.studentUidAndClassData(classId, emailOrName);
+            const { studentUid, classData, classRef } = await HelperRepository.studentUidAndClassData(classId, emailOrName);
     
             const updatedUids = (classData.studentUids || []).filter(uid => uid !== studentUid);
             
@@ -59,7 +53,6 @@ class TeacherController {
             res.status(500).json({ error: "Failed to remove student." });
         }
     }
-
 }
 
 module.exports = TeacherController;
