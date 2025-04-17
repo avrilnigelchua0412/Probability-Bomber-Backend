@@ -2,7 +2,6 @@ const FirebaseService = require("../config/FirebaseService");
 const StaticVariable = require("../config/StaticVariable");
 const UserRepository = require("./UserRepository");
 const admin = require("firebase-admin");
-const FieldValue = admin.firestore.FieldValue;
 
 class StudentRepository {
     static async findStudentUidByEmailOrUsername(emailOrName) {
@@ -32,5 +31,4 @@ class StudentRepository {
         await studentRef.update({ classId: classId });
     }
 }
-
 module.exports = StudentRepository;

@@ -10,6 +10,8 @@ class TeacherRoutes {
         this.router.post("/create_class", TeacherController.createClass);
         this.router.post("/add_student", TeacherController.addStudentToClass);
         this.router.post("/remove_student", TeacherController.removeStudentFromClass);
+        this.router.get("/teacher_classes", TeacherController.getTeacherClassNames);
+        this.router.post("/class_students", TeacherController.getAllStudentsNameInClass);
     }    
     getRouter() {
         return this.router;

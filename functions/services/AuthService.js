@@ -12,9 +12,8 @@ class AuthService {
     static async updatePassword(uid, newPassword) {
         try {
           // Attempt to update the password for the given user ID
-
         const user = await admin.auth().getUser(uid);
-        console.log('User exists:', user);
+        // console.log('User exists:', user);
 
         // Update the user's password
         await admin.auth().updateUser(uid, { password: newPassword });
