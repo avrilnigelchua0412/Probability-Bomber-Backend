@@ -22,6 +22,16 @@ class FirebaseService {
     getAuth() {
         return this.auth;
     }
+
+    async deleteDocument(collection, docId) {
+        try {
+            await this.db.collection(collection).doc(docId).delete();
+            console.log(`Document with ID ${docId} deleted from collection ${collection}.`);
+        } catch (error) {
+            console.error("Error deleting document:", error);
+            throw error;
+        }
+    }
 }
 
 module.exports = new FirebaseService();

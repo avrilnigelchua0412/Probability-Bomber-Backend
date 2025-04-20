@@ -3,15 +3,16 @@ const ClassRepository = require("../repositories/ClassRepository");
 const StudentRepository = require("../repositories/StudentRepository");
 const UserRepository = require("./UserRepository");
 class HelperRepository{
-    static async studentUidAndClassData(classId, emailOrName) {
+    static async studentUidAndClassData(className, emailOrName) {
         const studentUid = await StudentRepository.findStudentUidByEmailOrUsername(emailOrName);
+        const classId = await ClassRepository.getClassIdByName(className)
         const classData = await ClassRepository.getClassData(classId);
         const classRef = await ClassRepository.getClassDocument(classId); // Get doc ref
-        return { studentUid, classData, classRef };
+        return { studentUid, classData, classRef, classId};
     }
     static async getAllTeacherClassDataPromise(teacherUid){
         const teacherData = await UserRepository.getUserData(teacherUid, StaticVariable.teacherRole)
-        console.log("Teacher Data: ", teacherData)
+        // console.log("Teacher Data: ", teacherData)
         const classIds = teacherData.classes || [];
         if (classIds.length === 0) {
             return res.status(200).json({ message: "No classes found", classes: [] });
@@ -35,4 +36,5 @@ class HelperRepository{
         return studentsNames
     }
 }
+
 module.exports = HelperRepository;

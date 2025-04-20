@@ -12,7 +12,9 @@ class ClassRepository {
     }
     static async createClass(className, teacherUid) {
         const classNameQuery = await ClassRepository.getClassDataByNameHelper(className)
-        if(classNameQuery) throw new Error("Class Name already exist.");
+        if (!classNameQuery.empty) {
+            throw new Error("Class Name already exists.");
+        }
         const classRef = FirebaseService
             .getDB()
             .collection(StaticVariable.collectionClass)
@@ -24,16 +26,31 @@ class ClassRepository {
     static async getClassDocument(classId){
         return FirebaseService.getDB().collection(StaticVariable.collectionClass).doc(classId);
     }
-    static async getClassData(classId){
-        const classDocRef = await ClassRepository.getClassDocument(classId);
-        const classDocSnap = await classDocRef.get();
-        if(!classDocSnap.exists) throw new Error(`Class document not found for Class ID: ${classId}`);
-        return classDocSnap.data();
+    static async getClassData(classId) {
+        try {
+            const classDocRef = await ClassRepository.getClassDocument(classId);
+            const classDocSnap = await classDocRef.get();
+            if (!classDocSnap.exists) {
+                throw new Error(`Class document not found for Class ID: ${classId}`);
+            }
+            return classDocSnap.data();
+        } catch (error) {
+            console.error("Error getting class data:", error);
+            throw error;
+        }
     }
     static async getClassIdByName(className){
         const classNameQuery = await ClassRepository.getClassDataByNameHelper(className)
         if(classNameQuery.empty) throw new Error("No Class Name found.");
         return classNameQuery.docs[0].id;
+    }
+    static async removeClassFromDocuments(classId) {
+        try {
+            await FirebaseService.deleteDocument(StaticVariable.collectionClass, classId);
+        } catch (error) {
+            console.error(`Failed to delete class document ${classId}:`, error);
+            throw error;
+        }
     }
 }
 
