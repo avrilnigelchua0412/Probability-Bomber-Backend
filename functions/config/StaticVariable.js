@@ -10,11 +10,14 @@ class StaticVariable{
     static authPath = "/api/auth";
     static userPath = "/api/user";
     static teacherPath = "/api/teacher";
+    static quizPath = "/api/quiz";
+    static questionPath = "/api/question";
 
     static teacherRole = "teacher";
     static studentRole = "student";
 
     static collectionClass = "classes";
+    static collectionQuiz = "quizzes";
 
     static corsHeader = ["Authorization", "Content-Type"];
     static corsMethod = ["GET", "POST", "PUT", "DELETE"];

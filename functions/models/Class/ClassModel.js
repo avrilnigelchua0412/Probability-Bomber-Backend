@@ -1,8 +1,10 @@
 class ClassModel {
-    constructor(classId, className, teacherUid, studentUids = []) {
+    constructor(classId, className, teacherUid,
+        quizIds = [], studentUids = []) {
         this.classId = classId;
         this.className = className;
         this.teacherUid = teacherUid;
+        this.quizIds = quizIds;
         this.studentUids = studentUids; // Array of student UIDs
     }
 
@@ -10,6 +12,7 @@ class ClassModel {
         return {
             className: this.className,
             teacherUid: this.teacherUid,
+            quizIds: this.quizIds,
             studentUids: this.studentUids
         };
     }

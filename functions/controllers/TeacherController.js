@@ -12,7 +12,7 @@ class TeacherController {
             res.status(200).json({ message: "Success!"});
         } catch (error) {
             console.error("Error creating class:", error);
-            res.status(500).json({ error: "Failed to create class." });
+            res.status(500).json({ error: "Failed to create class."});
         }
     }
 

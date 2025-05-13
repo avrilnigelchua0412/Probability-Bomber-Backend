@@ -5,6 +5,7 @@ const Authenticator = require("../middlewares/AuthMiddleware");
 const userRoutes = require("../routes/UserRoutes");
 const authRoutes = require("../routes/AuthRoutes"); 
 const teacherRoutes = require("../routes/TeacherRoutes");
+const quizRoutes = require("../routes/QuizRoute");
 
 class Application{
     constructor(){
@@ -34,6 +35,7 @@ class Application{
         this.app.use(StaticVariable.authPath, authRoutes);
         this.app.use(StaticVariable.userPath, userRoutes);
         this.app.use(StaticVariable.teacherPath, teacherRoutes);
+        this.app.use(StaticVariable.quizPath, quizRoutes);
     }
 
     setupDefaultRoute() {

@@ -32,6 +32,10 @@ class FirebaseService {
             throw error;
         }
     }
+
+    async getRef(collection, id){
+        return this.getDB().collection(collection).doc(id);
+    }
 }
 
 module.exports = new FirebaseService();

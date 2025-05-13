@@ -6,14 +6,6 @@ class TeacherModel extends UserModel {
         this.classes = classes; // Array of ClassModel instances
     }
 
-    addClass(classModel) {
-        this.classes.push(classModel);
-    }
-
-    deleteClass(classId) {
-        this.classes = this.classes.filter(cls => cls.classId !== classId);
-    }
-
     toFirestore() {
         return {
             ...super.toFirestore(),
