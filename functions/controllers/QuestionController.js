@@ -23,10 +23,30 @@ class QuestionController {
             res.status(500).json({ error: "Failed to edit question."});
         }
     }
-    static async removeQuestionOfTheQuiz(req, res){
+    static async removeAllQuestionOfTheQuiz(req, res){
         try {
             const { questionName } = req.body;
-            await QuestionRepository.removeQuestion(questionName);
+            await QuestionService.removeAllQuestionService(questionName);
+            res.status(200).json({ message: "Success!"});
+        } catch (error) {
+            console.error("Error removing question:", error);
+            res.status(500).json({ error: "Failed to remove question."});
+        }
+    }
+    static async removeAQuestionOfAQuiz(req, res){
+        try {
+            const { questionName, quizName } = req.body;
+            await QuestionService.removeAQuestionOfAQuiz(questionName, quizName);
+            res.status(200).json({ message: "Success!"});
+        } catch (error) {
+            console.error("Error removing question:", error);
+            res.status(500).json({ error: "Failed to remove question."});
+        }
+    }
+    static async DeleteQuestion(req, res){
+        try {
+            const { questionName } = req.body;
+            await QuestionService.deleteQuestionService(questionName);
             res.status(200).json({ message: "Success!"});
         } catch (error) {
             console.error("Error removing question:", error);

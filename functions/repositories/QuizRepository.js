@@ -35,19 +35,31 @@ class QuizRepository{
         });
     }
         
-    static async deleteQuestionOnQuiz(quizId, questionId){
+    static async deleteQuestionOnQuiz(questionId, quizId){
         const quizRef = await FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
-        console.log("FieldValue object:", FirebaseService.getFieldValue());
-        await quizRef.update({
-            questions: FirebaseService.getFieldValue().arrayRemove(questionId)
-        });
+        const docSnapshot = await quizRef.get();
+
+        if (!docSnapshot.exists) throw new Error("Quiz not found.");
+
+        const currentQuestions = docSnapshot.data().questions || [];
+
+        if (currentQuestions.includes(questionId)) {
+            const updatedQuestions = currentQuestions.filter(id => id !== questionId);  // Correct way to remove
+            await quizRef.update({ questions: updatedQuestions });
+        }
     }
     
     static async addQuestionToQuiz(questionId, quizId){
         const quizRef = await FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
-        await quizRef.update({
-            questions: FirebaseService.getFieldValue().arrayUnion(questionId)
-        });
+        const docSnapshot = await quizRef.get();
+
+        if (!docSnapshot.exists) throw new Error("Quiz not found.");
+
+        const currentQuestions = docSnapshot.data().questions || [];
+        if (!currentQuestions.includes(questionId)) {
+            currentQuestions.push(questionId);
+            await quizRef.update({ questions: currentQuestions });
+        }
     }
 
     static async getQuizIdByName(quizName){
@@ -82,6 +94,10 @@ class QuizRepository{
         const path = `studentScores.${classId}`;
         const quizRef = FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
         await quizRef.update({ [path]: FirebaseService.getFieldValue().delete() });
+    }
+
+    static async getQuizSnapshot(){
+        return await FirebaseService.getDB().collection(StaticVariable.collectionQuiz).get();
     }
 }
 

@@ -19,9 +19,5 @@ class QuizService {
         await QuizRepository.deleteClassOnQuiz(quizId, classId);
         await QuizRepository.removeClassEntry(quizId, classId);
     }
-    
-    static async deleteQuestionOnQuizService(quizName, questionName){
-        // TODO
-    }
 }
 module.exports = QuizService;
