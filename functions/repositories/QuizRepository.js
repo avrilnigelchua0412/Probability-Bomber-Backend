@@ -12,19 +12,12 @@ class QuizRepository{
             .limit(1)
             .get();
     }
-    static async createQuiz(quizName, className, teacherUid){
-        const quizNameQuery = await QuizRepository.getQuizDataByNameHelper(quizName);
-        if (!quizNameQuery.empty) {
-            throw new Error("Quiz Name already exists.");
-        }
-        const classId = await ClassRepository.getClassIdByName(className);
-        const teacherData = await UserRepository.getUserData(teacherUid, StaticVariable.teacherRole);
-        const teacherName = teacherData.name
+    static async createQuiz(quizName, teacherName){
         const quizRef = FirebaseService
             .getDB()
             .collection(StaticVariable.collectionQuiz)
             .doc();
-        const quizModel = new QuizModel(quizRef.id, quizName, teacherName, [classId]);
+        const quizModel = new QuizModel(quizRef.id, quizName, teacherName);
         await quizRef.set(quizModel.toFirestore());
     }
 
@@ -42,17 +35,16 @@ class QuizRepository{
         });
     }
     
-    static async addQuestionOnQuiz(quizId, questionId){
-        const quizRef = FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
-        await quizRef.update({
-            questions: FirebaseService.getFieldValue().arrayUnion(questionId)
-        });
-    }
-    
     static async deleteQuestionOnQuiz(quizId, questionId){
         const quizRef = FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
         await quizRef.update({
             questions: FirebaseService.getFieldValue().arrayRemove(questionId)
+        });
+    }
+    static async addQuestionOnQuiz(quizId, questionId){
+        const quizRef = FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
+        await quizRef.update({
+            questions: FirebaseService.getFieldValue().arrayUnion(questionId)
         });
     }
 

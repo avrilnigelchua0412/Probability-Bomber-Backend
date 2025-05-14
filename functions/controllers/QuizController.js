@@ -1,12 +1,23 @@
 const ClassRepository = require("../repositories/ClassRepository");
 const HelperRepository = require("../repositories/HelperRepository");
 const QuizRepository = require("../repositories/QuizRepository");
+const QuizService = require("../services/QuizService");
+
+/**
+ * Implement: (Based on the Model Object's Fields)
+ * Create Quiz
+ * QuizName Edit
+ * Add, Remove and Edit(?) Class ID should affect `classIds` and `studentScores`
+ * Add and Remove Question
+ * Add and Remove Students in `studentScores`
+ * Add, Edit and Remove Scores in `studentScores`
+ */
 
 class QuizController {
     static async createQuizForTheTeacher(req, res){
         try {
-            const { quizName, className } = req.body;
-            await QuizRepository.createQuiz(quizName, className, req.uid);
+            const { quizName } = req.body;
+            await QuizService.createQuizService(quizName, req.uid);
             res.status(200).json({ message: "Success!"});
         } catch (error) {
             console.error("Error creating quiz:", error);
@@ -17,7 +28,7 @@ class QuizController {
     static async deleteClassInTheQuiz(req, res) {
         try {
             const { quizName, className } = req.body;
-            // TODO:
+            await QuizService.deleteClassOnQuizService(quizName, className);
             res.status(200).json({ message: "Class successfully removed from quiz." });
         } catch (error) {
             console.error("Error deleting class from quiz:", error);
@@ -73,9 +84,9 @@ class QuizController {
     static async addClassEntryforTheStudents(req, res){
         try {
             const { quizName, className } = req.body;
-            const quizId = await QuizRepository.getQuizIdByName(quizName);
-            const classId = await ClassRepository.getClassIdByName(className);
-            await QuizRepository.addClassEntry(quizId, classId)
+            // const quizId = await QuizRepository.getQuizIdByName(quizName);
+            // const classId = await ClassRepository.getClassIdByName(className);
+            // await QuizRepository.addClassEntry(quizId, classId)
             res.status(200).json({ message: 'Class entry added successfully' });
         } catch (error) {
             console.error("Error adding class:", error);
@@ -96,9 +107,9 @@ class QuizController {
     static async removeClassOfTheStudents(req, res){
         try {
             const { quizName, className } = req.body;
-            const quizId = await QuizRepository.getQuizIdByName(quizName);
-            const classId = await ClassRepository.getClassIdByName(className);
-            await QuizRepository.removeClassEntry(quizId, classId)
+            // const quizId = await QuizRepository.getQuizIdByName(quizName);
+            // const classId = await ClassRepository.getClassIdByName(className);
+            // await QuizRepository.removeClassEntry(quizId, classId)
             res.status(200).json({ message: 'Class entry removed successfully' });
         } catch (error) {
             console.error("Error removing class entry:", error);

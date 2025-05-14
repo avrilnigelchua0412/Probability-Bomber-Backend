@@ -1,6 +1,7 @@
 class QuestionModel {
-    constructor(questionId, questionDescription, numerator, denominator) {
+    constructor(questionId, questionName, questionDescription, numerator, denominator) {
         this.questionId = questionId;
+        this.questionName = questionName;
         this.questionDescription = questionDescription;
         this.numerator = numerator;
         this.denominator = denominator;
@@ -8,6 +9,7 @@ class QuestionModel {
 
     toFirestore() {
         return {
+            questionName : this.questionName,
             questionDescription : this.questionDescription,
             numerator : this.numerator,
             denominator : this.denominator,
