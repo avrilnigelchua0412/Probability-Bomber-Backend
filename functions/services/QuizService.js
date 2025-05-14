@@ -13,6 +13,14 @@ class QuizService {
         const teacherName = teacherData.name
         return await QuizRepository.createQuiz(quizName, teacherName);
     }
+
+    static async addClassOnQuizService(quizName, className){
+        const quizId = await QuizRepository.getQuizIdByName(quizName);
+        const classId = await ClassRepository.getClassIdByName(className);
+        await QuizRepository.addClassOnQuiz(quizId, classId);
+        await QuizRepository.addClassEntry(quizId, classId);
+    }
+
     static async deleteClassOnQuizService(quizName, className) {
         const quizId = await QuizRepository.getQuizIdByName(quizName);
         const classId = await ClassRepository.getClassIdByName(className);

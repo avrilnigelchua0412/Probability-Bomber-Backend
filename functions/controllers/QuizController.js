@@ -39,7 +39,7 @@ class QuizController {
     static async addClassInTheQuiz(req, res) {
         try {
             const { quizName, className } = req.body;
-            // TODO:
+            await QuizService.addClassOnQuizService(quizName, className)
             res.status(200).json({ message: "Class successfully added to quiz." });
         } catch (error) {
             console.error("Error adding class to quiz:", error);

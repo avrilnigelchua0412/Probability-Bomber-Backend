@@ -9,8 +9,8 @@ class QuizRoute {
     registerRoutes() {
         this.router.post("/create_quiz", QuizController.createQuizForTheTeacher)
         
-        this.router.post("/delete_class_quiz", QuizController.deleteClassInTheQuiz)
         this.router.post("/add_class_quiz", QuizController.addClassInTheQuiz)
+        this.router.post("/delete_class_quiz", QuizController.deleteClassInTheQuiz)
         this.router.post("/delete_question_quiz", QuizController.deleteQuestionInTheQuiz)
         this.router.post("/add_question_quiz", QuizController.addQuestionInTheQuiz)
 

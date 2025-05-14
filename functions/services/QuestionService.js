@@ -15,8 +15,6 @@ class QuestionService {
                     await QuizRepository.deleteQuestionOnQuiz(questionId, doc.id);
                 })
             );
-        // await QuizRepository.deleteQuestionOnQuiz(questionName, quizId);
-        // await QuestionRepository.removeQuestion(questionName);
     }
     static async removeAQuestionOfAQuiz(questionName, quizName){
         const quizId = await QuizRepository.getQuizIdByName(quizName)
