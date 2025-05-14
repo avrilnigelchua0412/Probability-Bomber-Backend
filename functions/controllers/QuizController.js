@@ -13,6 +13,52 @@ class QuizController {
             res.status(500).json({ error: "Failed to create quiz."});
         }
     }
+
+    static async deleteClassInTheQuiz(req, res) {
+        try {
+            const { quizName, className } = req.body;
+            // TODO:
+            res.status(200).json({ message: "Class successfully removed from quiz." });
+        } catch (error) {
+            console.error("Error deleting class from quiz:", error);
+            res.status(500).json({ error: "Failed to delete class from quiz." });
+        }
+    }
+
+    static async addClassInTheQuiz(req, res) {
+        try {
+            const { quizName, className } = req.body;
+            // TODO:
+            res.status(200).json({ message: "Class successfully added to quiz." });
+        } catch (error) {
+            console.error("Error adding class to quiz:", error);
+            res.status(500).json({ error: "Failed to add class to quiz." });
+        }
+    }
+
+    static async deleteQuestionInTheQuiz(req, res) {
+        try {
+            const { quizName, questionId } = req.body;
+            // TODO:
+            res.status(200).json({ message: "Question successfully removed from quiz." });
+        } catch (error) {
+            console.error("Error deleting question from quiz:", error);
+            res.status(500).json({ error: "Failed to delete question from quiz." });
+        }
+    }
+
+    static async addQuestionInTheQuiz(req, res) {
+        try {
+            const { quizName, questionId } = req.body;
+            // TODO:
+            res.status(200).json({ message: "Question successfully added to quiz." });
+        } catch (error) {
+            console.error("Error adding question to quiz:", error);
+            res.status(500).json({ error: "Failed to add question to quiz." });
+        }
+    }
+
+
     static async updateScoreOfTheStudent(req, res){
         try {
             const { quizName, className, studentName, score } = req.body;

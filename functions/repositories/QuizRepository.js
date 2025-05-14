@@ -28,6 +28,34 @@ class QuizRepository{
         await quizRef.set(quizModel.toFirestore());
     }
 
+    static async deleteClassOnQuiz(quizId, classId) {
+        const quizRef = FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
+        await quizRef.update({
+            classIds: FirebaseService.getFieldValue().arrayRemove(classId)
+        });
+    }
+
+    static async addClassOnQuiz(quizId, classId) {
+        const quizRef = FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
+        await quizRef.update({
+            classIds: FirebaseService.getFieldValue().arrayUnion(classId)
+        });
+    }
+    
+    static async addQuestionOnQuiz(quizId, questionId){
+        const quizRef = FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
+        await quizRef.update({
+            questions: FirebaseService.getFieldValue().arrayUnion(questionId)
+        });
+    }
+    
+    static async deleteQuestionOnQuiz(quizId, questionId){
+        const quizRef = FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
+        await quizRef.update({
+            questions: FirebaseService.getFieldValue().arrayRemove(questionId)
+        });
+    }
+
     static async getQuizIdByName(quizName){
         const quizNameQuery = await QuizRepository.getQuizDataByNameHelper(quizName);
         if(quizNameQuery.empty) throw new Error("No Quiz Name found.");
@@ -52,14 +80,14 @@ class QuizRepository{
     static async removeStudentScore(quizId, classId, studentUid) {
         const path = `studentScores.${classId}.${studentUid}`;
         const quizRef = FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
-        await quizRef.update({ [path]: FirebaseService.getAdmin().firestore.FieldValue.delete() });
+        await quizRef.update({ [path]: FirebaseService.getFieldValue().delete() });
     }
 
     // Remove entire class's scores
     static async removeClassEntry(quizId, classId) {
         const path = `studentScores.${classId}`;
         const quizRef = FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
-        await quizRef.update({ [path]: FirebaseService.getAdmin().firestore.FieldValue.delete() });
+        await quizRef.update({ [path]: FirebaseService.getFieldValue().delete() });
     }
 }
 

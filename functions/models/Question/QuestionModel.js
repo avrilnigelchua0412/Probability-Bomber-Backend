@@ -1,6 +1,6 @@
 class QuestionModel {
-    constructor(questionUID, questionDescription, numerator, denominator) {
-        this.questionUID = questionUID;
+    constructor(questionId, questionDescription, numerator, denominator) {
+        this.questionId = questionId;
         this.questionDescription = questionDescription;
         this.numerator = numerator;
         this.denominator = denominator;

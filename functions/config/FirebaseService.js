@@ -23,6 +23,14 @@ class FirebaseService {
         return this.auth;
     }
 
+    getFieldValue() {
+        return this.admin.firestore.FieldValue;
+    }
+    
+    getAdmin(){
+        return this.admin;
+    }
+
     async deleteDocument(collection, docId) {
         try {
             await this.db.collection(collection).doc(docId).delete();
