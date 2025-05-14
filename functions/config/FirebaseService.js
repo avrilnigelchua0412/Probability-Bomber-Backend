@@ -4,13 +4,13 @@ const StaticVariable = require("./StaticVariable")
 
 class FirebaseService {
     constructor() {
+        this.admin = admin;
         if (!admin.apps.length) {
             admin.initializeApp({
                 credential: admin.credential.cert(serviceAccount),
                 databaseURL: StaticVariable.databaseURL
             });
         }
-
         this.db = admin.firestore();
         this.auth = admin.auth();
     }

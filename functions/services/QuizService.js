@@ -23,8 +23,5 @@ class QuizService {
     static async deleteQuestionOnQuizService(quizName, questionName){
         // TODO
     }
-    static async addQuestionOnQuizService(quizName, questionName){
-        // TODO
-    }
 }
 module.exports = QuizService;

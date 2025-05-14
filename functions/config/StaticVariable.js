@@ -17,6 +17,7 @@ class StaticVariable{
     static studentRole = "student";
 
     static collectionClass = "classes";
+    static collectionQuestion = "questions";
     static collectionQuiz = "quizzes";
 
     static corsHeader = ["Authorization", "Content-Type"];

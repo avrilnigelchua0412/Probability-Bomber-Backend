@@ -22,27 +22,29 @@ class QuizRepository{
     }
 
     static async deleteClassOnQuiz(quizId, classId) {
-        const quizRef = FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
+        const quizRef = await FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
         await quizRef.update({
             classIds: FirebaseService.getFieldValue().arrayRemove(classId)
         });
     }
 
     static async addClassOnQuiz(quizId, classId) {
-        const quizRef = FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
+        const quizRef = await FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
         await quizRef.update({
             classIds: FirebaseService.getFieldValue().arrayUnion(classId)
         });
     }
-    
+        
     static async deleteQuestionOnQuiz(quizId, questionId){
-        const quizRef = FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
+        const quizRef = await FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
+        console.log("FieldValue object:", FirebaseService.getFieldValue());
         await quizRef.update({
             questions: FirebaseService.getFieldValue().arrayRemove(questionId)
         });
     }
-    static async addQuestionOnQuiz(quizId, questionId){
-        const quizRef = FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
+    
+    static async addQuestionToQuiz(questionId, quizId){
+        const quizRef = await FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
         await quizRef.update({
             questions: FirebaseService.getFieldValue().arrayUnion(questionId)
         });

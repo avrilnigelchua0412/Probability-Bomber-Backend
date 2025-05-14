@@ -6,6 +6,7 @@ const userRoutes = require("../routes/UserRoutes");
 const authRoutes = require("../routes/AuthRoutes"); 
 const teacherRoutes = require("../routes/TeacherRoutes");
 const quizRoutes = require("../routes/QuizRoute");
+const questionRoutes = require("../routes/QuestionRoute");
 
 class Application{
     constructor(){
@@ -36,6 +37,7 @@ class Application{
         this.app.use(StaticVariable.userPath, userRoutes);
         this.app.use(StaticVariable.teacherPath, teacherRoutes);
         this.app.use(StaticVariable.quizPath, quizRoutes);
+        this.app.use(StaticVariable.questionPath, questionRoutes);
     }
 
     setupDefaultRoute() {
