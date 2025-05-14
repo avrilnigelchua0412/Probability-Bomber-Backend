@@ -1,6 +1,7 @@
 const StaticVariable = require("../config/StaticVariable");
 const ClassRepository = require("../repositories/ClassRepository");
 const StudentRepository = require("../repositories/StudentRepository");
+const QuizRepository = require("./QuizRepository");
 const UserRepository = require("./UserRepository");
 class HelperRepository{
     static async studentUidAndClassData(className, emailOrName) {
@@ -34,6 +35,16 @@ class HelperRepository{
         const studentsNames = studentsPromise.map(studentData => studentData.name
         );
         return studentsNames
+    }
+    static async getQuizIdClassIdStudentUid(quizName, className, studentName){
+        const quizId = await QuizRepository.getQuizIdByName(quizName);
+        const classId = await ClassRepository.getClassIdByName(className);
+        const studentUid = await StudentRepository.findStudentUidByEmailOrUsername(studentName);
+        return { 
+            quizId,
+            classId,
+            studentUid
+        }
     }
 }
 

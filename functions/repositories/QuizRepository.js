@@ -14,7 +14,7 @@ class QuizRepository{
     }
     static async createQuiz(quizName, className, teacherUid){
         const quizNameQuery = await QuizRepository.getQuizDataByNameHelper(quizName);
-        if(!quizNameQuery){
+        if (!quizNameQuery.empty) {
             throw new Error("Quiz Name already exists.");
         }
         const classId = await ClassRepository.getClassIdByName(className);
@@ -24,13 +24,43 @@ class QuizRepository{
             .getDB()
             .collection(StaticVariable.collectionQuiz)
             .doc();
-        const quizModel = new QuizModel(quizRef.id, quizName, teacherName, [].push(classId));
+        const quizModel = new QuizModel(quizRef.id, quizName, teacherName, [classId]);
         await quizRef.set(quizModel.toFirestore());
     }
-    static async getQuizDocument(quizId){
-        return FirebaseService.getDB().collection(StaticVariable.collectionQuiz).doc(quizId);
+
+    static async getQuizIdByName(quizName){
+        const quizNameQuery = await QuizRepository.getQuizDataByNameHelper(quizName);
+        if(quizNameQuery.empty) throw new Error("No Quiz Name found.");
+        return quizNameQuery.docs[0].id;
     }
-    
+
+    // Update score of a student
+    static async updateStudentScore(quizId, classId, studentUid, score) {
+        const path = `studentScores.${classId}.${studentUid}`;
+        const quizRef = FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
+        await quizRef.update({ [path]: score });
+    }
+
+    // Add a new class score entry
+    static async addClassEntry(quizId, classId) {
+        const path = `studentScores.${classId}`;
+        const quizRef = FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
+        await quizRef.update({ [path]: {} });
+    }
+
+    // Remove a student's score
+    static async removeStudentScore(quizId, classId, studentUid) {
+        const path = `studentScores.${classId}.${studentUid}`;
+        const quizRef = FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
+        await quizRef.update({ [path]: FirebaseService.getAdmin().firestore.FieldValue.delete() });
+    }
+
+    // Remove entire class's scores
+    static async removeClassEntry(quizId, classId) {
+        const path = `studentScores.${classId}`;
+        const quizRef = FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
+        await quizRef.update({ [path]: FirebaseService.getAdmin().firestore.FieldValue.delete() });
+    }
 }
 
 module.exports = QuizRepository;

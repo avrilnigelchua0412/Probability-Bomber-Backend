@@ -8,9 +8,11 @@ class QuizRoute {
     }
     registerRoutes() {
         this.router.post("/create_quiz", QuizController.createQuizForTheTeacher)
-        this.router.post("/edit_quiz", QuizController.editQuizForTheTeacher)
-        // this.router.post("/remove_quiz", QuizController.removeQuizForTheTeacher)
-        // this.router.get("/get_all_quiz", QuizController.getAllQuizName)
+
+        this.router.post("/update_score", QuizController.updateScoreOfTheStudent)
+        this.router.post("/add_class_entry", QuizController.addClassEntryforTheStudents)
+        this.router.post("/remove_score", QuizController.removeScoreOfTheStudent)
+        this.router.post("/remove_class_entry", QuizController.removeClassOfTheStudents)
     }
     getRouter() {
         return this.router;
