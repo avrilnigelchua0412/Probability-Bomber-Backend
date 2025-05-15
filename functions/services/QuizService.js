@@ -1,5 +1,6 @@
 const StaticVariable = require("../config/StaticVariable");
 const ClassRepository = require("../repositories/ClassRepository");
+const HelperRepository = require("../repositories/HelperRepository");
 const QuizRepository = require("../repositories/QuizRepository");
 const UserRepository = require("../repositories/UserRepository");
 
@@ -26,6 +27,15 @@ class QuizService {
         const classId = await ClassRepository.getClassIdByName(className);
         await QuizRepository.deleteClassOnQuiz(quizId, classId);
         await QuizRepository.removeClassEntry(quizId, classId);
+    }
+
+    static async updateStudentScoreService(quizName, className, studentName, score){
+        const {quizId, classId, studentUid } = await HelperRepository.getQuizIdClassIdStudentUid(quizName, className, studentName);
+        await QuizRepository.updateStudentScore(quizId, classId, studentUid, score)
+    }
+    static async removeStudentScoreService(quizName, className, studentName){
+        const { quizId, classId, studentUid } = await HelperRepository.getQuizIdClassIdStudentUid(quizName, className, studentName);
+        await QuizRepository.removeStudentScore(quizId, classId, studentUid);
     }
 }
 module.exports = QuizService;

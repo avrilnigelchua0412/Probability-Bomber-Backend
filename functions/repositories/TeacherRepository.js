@@ -1,8 +1,7 @@
-const FirebaseService = require("../config/FirebaseService");
-const TeacherModel = require("../models/User/TeacherModel");
 const UserRepository = require("../repositories/UserRepository");
 const StaticVariable = require("../config/StaticVariable");
 const ClassRepository = require("./ClassRepository");
+const StudentRepository = require("./StudentRepository");
 
 class TeacherRepository{
     static async repositoryHelper(teacherId){
@@ -37,6 +36,36 @@ class TeacherRepository{
             console.error("Failed to remove class from teacher:", error);
             throw error; // Propagate to controller
         }
+    }
+    static async addStudentToTheClass(studentUid, classData, classRef, classId){
+        const studentUids = classData.studentUids || [];
+        const studentClassChecker = await StudentRepository.studentClassExistChecker(studentUid);
+        if(studentClassChecker == true){
+            throw new Error(`Student already have a Class!`);
+        } 
+        if (!studentUids.includes(studentUid)) {
+            await StudentRepository.addClass(studentUid, classId)
+            studentUids.push(studentUid);
+            await classRef.update({ studentUids });
+        }
+    }
+    static async removeStudentToTheClass(studentUid, classData, classRef){
+        const studentClassChecker = await StudentRepository.studentClassExistChecker(studentUid);
+        if(studentClassChecker == false){
+            throw new Error(`Student does not have Class!`);
+        } 
+        const updatedUids = (classData.studentUids || []).filter(uid => uid !== studentUid);
+        await StudentRepository.removeClass(studentUid);
+        await classRef.update({ studentUids: updatedUids });
+    }
+    static async removeTeacherClass(classId, classData){
+        const studentUids = classData.studentUids || [];
+        await Promise.all(
+            studentUids.map(async (studentUid) =>
+                await StudentRepository.removeClass(studentUid)
+            )
+        );
+        await ClassRepository.removeClassFromDocuments(classId);
     }
 }
 

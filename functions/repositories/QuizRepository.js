@@ -102,9 +102,19 @@ class QuizRepository{
 
     // Remove a student's score
     static async removeStudentScore(quizId, classId, studentUid) {
-        const path = `studentScores.${classId}.${studentUid}`;
         const quizRef = await FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
-        await quizRef.update({ [path]: FirebaseService.getFieldValue().delete() });
+        const docSnapshot = await quizRef.get();
+        if (!docSnapshot.exists) throw new Error("Quiz not found.");
+        const quizData = docSnapshot.data();
+        const studentScores = quizData.studentScores || {};
+        if (studentScores[classId]) {
+            delete studentScores[classId][studentUid];
+            // // Optional: clean up empty class entry
+            // if (Object.keys(studentScores[classId]).length === 0) {
+            //     delete studentScores[classId];
+            // }
+            await quizRef.update({ studentScores });
+        }
     }
 
     // Remove entire class's scores
