@@ -7,6 +7,8 @@ class QuestionRoute {
         this.registerRoutes();
     }
     registerRoutes() {
+        this.router.get("/get_all_question", QuestionController.getAllQuestions)
+
         this.router.post("/create_question", QuestionController.createQuestionForTheQuiz)
         this.router.post("/edit_question", QuestionController.editQuestionOfTheQuiz)
 

@@ -7,6 +7,8 @@ class QuizRoute {
         this.registerRoutes();
     }
     registerRoutes() {
+        this.router.get("/get_all_quiz", QuizController.getAllTheQuiz)
+
         this.router.post("/create_quiz", QuizController.createQuizForTheTeacher)
         
         this.router.post("/add_class_quiz", QuizController.addClassInTheQuiz)

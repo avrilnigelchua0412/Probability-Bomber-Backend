@@ -13,6 +13,15 @@ const QuizService = require("../services/QuizService");
  */
 
 class QuizController {
+    static async getAllTheQuiz(req, res){
+        try {
+            const allQuizzes = await QuizService.getAllTheQuizService()
+            res.status(200).json({ allQuizzes });
+        } catch (error) {
+            console.error("Error creating quiz:", error);
+            res.status(500).json({ error: "Failed to create quiz."});
+        }
+    }
     static async createQuizForTheTeacher(req, res){
         try {
             const { quizName } = req.body;

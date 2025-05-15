@@ -32,6 +32,9 @@ class QuestionRepository{
         const questionRef = await FirebaseService.getRef(StaticVariable.collectionQuestion, questionId);
         await questionRef.delete();
     }
+    static async getQuestionSnapshot(){
+        return await FirebaseService.getDB().collection(StaticVariable.collectionQuestion).get();
+    }
 }
 
 module.exports = QuestionRepository;

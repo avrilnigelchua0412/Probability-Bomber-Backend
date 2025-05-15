@@ -25,5 +25,14 @@ class QuestionService {
         await QuestionService.removeAllQuestionService(questionName);
         await QuestionRepository.removeQuestion(questionName);
     }
+    static async getAllQuestionService() {
+        const snapshot = await QuestionRepository.getQuestionSnapshot();
+
+        const allQuestions = await Promise.all(
+            snapshot.docs.map(async (doc) => doc.data())
+        );
+
+        return allQuestions; // or log them here
+    }
 }
 module.exports = QuestionService;

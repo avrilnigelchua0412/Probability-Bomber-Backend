@@ -3,6 +3,15 @@ const QuestionService = require("../services/QuestionService");
 
 
 class QuestionController {
+    static async getAllQuestions(req, res){
+        try {
+            const allQuestions = await QuestionService.getAllQuestionService()
+            res.status(200).json({ allQuestions });
+        } catch (error) {
+            console.error("Error getting all question:", error);
+            res.status(500).json({ error: "Failed to get all question."});
+        }
+    }
     static async createQuestionForTheQuiz(req, res){
         try {
             const { questionName, questionDescription, numerator, denominator } = req.body

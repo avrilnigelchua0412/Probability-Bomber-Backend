@@ -37,5 +37,11 @@ class QuizService {
         const { quizId, classId, studentUid } = await HelperRepository.getQuizIdClassIdStudentUid(quizName, className, studentName);
         await QuizRepository.removeStudentScore(quizId, classId, studentUid);
     }
+    static async getAllTheQuizService(){
+        const snapshot = await QuizRepository.getQuizSnapshot();
+        return await Promise.all(
+            snapshot.docs.map(async (doc) => doc.data())
+        );
+    }
 }
 module.exports = QuizService;
