@@ -8,12 +8,17 @@ class AuthController {
     static async register(req, res){
         try {
             const { name, email, password, role } = req.body;
-            // console.log(name, email, password, role);
+            console.log(name, email, password, role);
             const createdAt = FieldValue.serverTimestamp();
+            console.log(name, email, password, role);
             const userRecord = await AuthService.registerUser(email, password);
+            console.log(name, email, password, role);
             const newUser = UserFactory.instantiateUser(userRecord.uid, name, email, createdAt, role);
+            console.log(name, email, password, role);
             await UserRepository.createUser(userRecord.uid, newUser);
+            console.log(name, email, password, role);
             res.status(201).send({ message: `${role} created successfully!` }); // 201 Created
+            console.log(name, email, password, role);
         } catch (error) {
             res.status(500).send({ error: error.message });
         }

@@ -3,7 +3,9 @@ const { getAuth } = require("firebase-admin/auth");
 const admin = require('firebase-admin');
 
 class AuthService {
-    static async registerUser(email, password) {
+  static async registerUser(email, password) {
+    //naa diri ang na error
+        console.log(email,password)
         return await getAuth().createUser({ email, password });
     }
     static async sendResetPassword(email) {
