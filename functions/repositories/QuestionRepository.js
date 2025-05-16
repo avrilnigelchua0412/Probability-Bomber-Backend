@@ -4,15 +4,15 @@ const QuestionModel = require("../models/Question/QuestionModel");
 const QuizRepository = require("./QuizRepository");
 
 class QuestionRepository{
-    static async createQuestion(questionName, questionDescription, numerator, denominator){
+    static async createQuestion(questionName, questionDescription, numerator, denominator, probability, event){
         const questionRef = FirebaseService.getDB().collection(StaticVariable.collectionQuestion).doc();
-        const questionModel = new QuestionModel(questionRef.id, questionName, questionDescription, numerator, denominator);
+        const questionModel = new QuestionModel(questionRef.id, questionName, questionDescription, numerator, denominator, probability, event);
         await questionRef.set(questionModel.toFirestore());
     }
-    static async editQuestion(questionName, questionDescription, numerator, denominator){
+    static async editQuestion(questionName, questionDescription, numerator, denominator, probability, event){
         const questionId = await QuestionRepository.getQuestionIdByName(questionName);
         const questionRef = await FirebaseService.getRef(StaticVariable.collectionQuestion, questionId);
-        const questionModel = new QuestionModel(questionRef.id, questionName, questionDescription, numerator, denominator);
+        const questionModel = new QuestionModel(questionRef.id, questionName, questionDescription, numerator, denominator, probability, event);
         await questionRef.update(questionModel.toFirestore());
     }
     static async getQuestionDataByNameHelper(questionName){

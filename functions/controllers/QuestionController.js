@@ -14,8 +14,11 @@ class QuestionController {
     }
     static async createQuestionForTheQuiz(req, res){
         try {
-            const { questionName, questionDescription, numerator, denominator } = req.body
-            await QuestionRepository.createQuestion(questionName, questionDescription, numerator, denominator);
+            const { questionName, questionDescription, numerator, denominator, probability, event } = req.body
+            if (!Array.isArray(event)) {
+                return res.status(400).json({ error: "'event' must be an array." });
+            }
+            await QuestionRepository.createQuestion(questionName, questionDescription, numerator, denominator, probability, event);
             res.status(200).json({ message: "Success!"});
         } catch (error) {
             console.error("Error creating question:", error);
@@ -24,8 +27,11 @@ class QuestionController {
     }
     static async editQuestionOfTheQuiz(req, res){
         try {
-            const { questionName, questionDescription, numerator, denominator } = req.body
-            await QuestionRepository.editQuestion(questionName, questionDescription, numerator, denominator);
+            const { questionName, questionDescription, numerator, denominator, probability, event } = req.body
+            if (!Array.isArray(event)) {
+                return res.status(400).json({ error: "'event' must be an array." });
+            }
+            await QuestionRepository.editQuestion(questionName, questionDescription, numerator, denominator, probability, event);
             res.status(200).json({ message: "Success!"});
         } catch (error) {
             console.error("Error editing question:", error);
