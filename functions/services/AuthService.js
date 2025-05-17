@@ -1,31 +1,42 @@
-// const jwt = require("jsonwebtoken");
-const { getAuth } = require("firebase-admin/auth");
-const admin = require('firebase-admin');
-
+const firebaseService = require("../config/FirebaseService");
 class AuthService {
     static async registerUser(email, password) {
-        return await getAuth().createUser({ email, password });
+        try {
+            const auth = firebaseService.getAuth();
+            const user = await auth.createUser({ email, password });
+            console.log("User created:", user.uid);
+            return user;
+        } catch (error) {
+            console.error("registerUser error:", error);
+            throw error;
+        }
     }
+
     static async sendResetPassword(email) {
-        return await getAuth().generatePasswordResetLink(email);
+        try {
+            const auth = firebaseService.getAuth();
+            return await auth.generatePasswordResetLink(email);
+        } catch (error) {
+            console.error("sendResetPassword error:", error);
+            throw error;
+        }
     }
+
     static async updatePassword(uid, newPassword) {
         try {
-          // Attempt to update the password for the given user ID
-        const user = await admin.auth().getUser(uid);
-        // console.log('User exists:', user);
+            const auth = firebaseService.getAuth();
+            const user = await auth.getUser(uid);
+            console.log('User exists:', user.uid);
 
-        // Update the user's password
-        await admin.auth().updateUser(uid, { password: newPassword });
-        console.log('Password updated successfully.');
+            await auth.updateUser(uid, { password: newPassword });
+            console.log('Password updated successfully.');
 
-        return true;
+            return true;
         } catch (error) {
-        console.error("Error updating password:", error.message);
-          // If there's an error, return false indicating failure
-        return false;
+            console.error("Error updating password:", error.message);
+            return false;
         }
-      }
+    }
 }
 
 module.exports = AuthService;

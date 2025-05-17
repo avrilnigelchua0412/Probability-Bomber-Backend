@@ -52,6 +52,17 @@ class ClassRepository {
             throw error;
         }
     }
+    
+    // // Update score of a student
+    // static async updateStudentScore(quizId, classId, studentUid, score) {
+    //     const path = `studentScores.${classId}.${studentUid}`;
+    //     const quizRef = await FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
+    //     await quizRef.update({ [path]: score });
+    // }
+    static async editClassName(classId, newClassName){
+        const classRef = await FirebaseService.getRef(StaticVariable.collectionClass, classId);
+        await classRef.update({ className: newClassName })
+    }
 }
 
 module.exports = ClassRepository;

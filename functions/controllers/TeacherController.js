@@ -44,6 +44,16 @@ class TeacherController {
             res.status(500).json({ error: "Failed to remove class." });
         }
     }
+    static async editClassOfTheTeacher(req, res){
+        try {
+            const { className, newClassName } = req.body;
+            await TeacherService.editClassOfTheTeacherService(className, req.uid, newClassName)
+            res.status(200).json({ message: "Success!" });
+        } catch (error) {
+            console.error("Error removing class:", error);
+            res.status(500).json({ error: "Failed to remove class." });
+        }
+    }
 
     static async getTeacherClassNames(req, res){
         try {
