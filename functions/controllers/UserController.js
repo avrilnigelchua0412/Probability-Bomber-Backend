@@ -3,13 +3,9 @@ const UserRepository = require("../repositories/UserRepository");
 class UserController {
     static async getUserProfile(req, res){
         try {
-            const userData = await UserRepository.getUserData(req.uid);
-
-            if(!userData){
-                if(res instanceof Response){
-                    return res.status(404).json({ error: "User not found" });
-                }
-                throw "Not a response?";
+            const userData = await UserRepository.getUserData(req.uid, req.role);
+            if (!userData) {
+                throw new Error("User not found for UID: " + req.uid);
             }
             res.json({
                 message: "Authenticated!",
@@ -19,7 +15,8 @@ class UserController {
                 }
             });
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            console.error("Error fetching user profile:", error);
+            res.status(500).json({ error: error?.message || "Internal server error" });
         }
     }
 }

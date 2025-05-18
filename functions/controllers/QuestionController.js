@@ -1,3 +1,5 @@
+const CreateQuestionDTO = require("../dto/CreateQuestionDTO");
+const EditQuestionDTO = require("../dto/EditQuestionDTO");
 const QuestionRepository = require("../repositories/QuestionRepository");
 const QuestionService = require("../services/QuestionService");
 
@@ -14,11 +16,11 @@ class QuestionController {
     }
     static async createQuestionForTheQuiz(req, res){
         try {
-            const { questionName, questionDescription, numerator, denominator, probability, event } = req.body
-            if (!Array.isArray(event)) {
+            const createQuestionDTO  = CreateQuestionDTO.fromRequestBody(req.validatedBody)
+            if (!Array.isArray(createQuestionDTO.event)) {
                 return res.status(400).json({ error: "'event' must be an array." });
             }
-            await QuestionRepository.createQuestion(questionName, questionDescription, numerator, denominator, probability, event);
+            await QuestionService.createQuestionService(createQuestionDTO, req.uid);
             res.status(200).json({ message: "Success!"});
         } catch (error) {
             console.error("Error creating question:", error);
@@ -27,11 +29,11 @@ class QuestionController {
     }
     static async editQuestionOfTheQuiz(req, res){
         try {
-            const { questionName, questionDescription, numerator, denominator, probability, event, originalQuestionName } = req.body
-            if (!Array.isArray(event)) {
+            const editQuestionDTO = EditQuestionDTO.fromRequestBody(req.validatedBody);
+            if (!Array.isArray(editQuestionDTO.event)) {
                 return res.status(400).json({ error: "'event' must be an array." });
             }
-            await QuestionRepository.editQuestion(questionName, questionDescription, numerator, denominator, probability, event, originalQuestionName);
+            await QuestionService.editQuestionService(editQuestionDTO);
             res.status(200).json({ message: "Success!"});
         } catch (error) {
             console.error("Error editing question:", error);

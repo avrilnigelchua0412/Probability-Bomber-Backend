@@ -1,5 +1,5 @@
 class QuestionModel {
-    constructor(questionId, questionName, questionDescription, numerator, denominator, probability, event = []) {
+    constructor(questionId, questionName, createBy, questionDescription, numerator, denominator, probability, event = []) {
         this.questionId = questionId;
         this.questionName = questionName;
         this.questionDescription = questionDescription;
@@ -7,6 +7,7 @@ class QuestionModel {
         this.denominator = denominator;
         this.probability = probability;
         this.event = event;
+        this.createBy = createBy;
     }
 
     toFirestore() {
@@ -16,7 +17,8 @@ class QuestionModel {
             numerator : this.numerator,
             denominator : this.denominator,
             probability : this.probability,
-            event : this.event
+            event : this.event,
+            createBy: this.createBy
         };
     }
 }
