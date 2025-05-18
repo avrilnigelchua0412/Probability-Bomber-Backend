@@ -9,8 +9,8 @@ class QuestionRepository{
         const questionModel = new QuestionModel(questionRef.id, questionName, questionDescription, numerator, denominator, probability, event);
         await questionRef.set(questionModel.toFirestore());
     }
-    static async editQuestion(questionName, questionDescription, numerator, denominator, probability, event){
-        const questionId = await QuestionRepository.getQuestionIdByName(questionName);
+    static async editQuestion(questionName, questionDescription, numerator, denominator, probability, event, originalQuestionName){
+        const questionId = await QuestionRepository.getQuestionIdByName(originalQuestionName);
         const questionRef = await FirebaseService.getRef(StaticVariable.collectionQuestion, questionId);
         const questionModel = new QuestionModel(questionRef.id, questionName, questionDescription, numerator, denominator, probability, event);
         await questionRef.update(questionModel.toFirestore());

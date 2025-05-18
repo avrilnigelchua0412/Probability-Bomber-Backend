@@ -8,10 +8,11 @@ class AuthController {
     static async register(req, res){
         try {
             const { name, email, password, role } = req.body;
+            console.log("Debug1: ", name, email, password, role)
             const createdAt = FieldValue.serverTimestamp();
-            console.log(name, email, password, role);
+            console.log("Debug2: ", createdAt)
             const userRecord = await AuthService.registerUser(email, password);
-            console.log(name, email, password, role);
+            console.log("Debug3: ", userRecord)
             const newUser = UserFactory.instantiateUser(userRecord.uid, name, email, createdAt, role);
             console.log(name, email, password, role);
             await UserRepository.createUser(userRecord.uid, newUser);

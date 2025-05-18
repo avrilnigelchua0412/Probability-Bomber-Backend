@@ -52,6 +52,11 @@ class ClassRepository {
             throw error;
         }
     }
+    
+    static async editClassName(classId, newClassName){
+        const classRef = await FirebaseService.getRef(StaticVariable.collectionClass, classId);
+        await classRef.update({ className: newClassName })
+    }
 }
 
 module.exports = ClassRepository;

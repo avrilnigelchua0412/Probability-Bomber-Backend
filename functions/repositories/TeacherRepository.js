@@ -2,6 +2,7 @@ const UserRepository = require("../repositories/UserRepository");
 const StaticVariable = require("../config/StaticVariable");
 const ClassRepository = require("./ClassRepository");
 const StudentRepository = require("./StudentRepository");
+const FirebaseService = require("../config/FirebaseService");
 
 class TeacherRepository{
     static async repositoryHelper(teacherId){
@@ -66,6 +67,12 @@ class TeacherRepository{
             )
         );
         await ClassRepository.removeClassFromDocuments(classId);
+    }
+    static async getTeacherSnapshot(teacherUid) {
+        return await FirebaseService.getDB()
+            .collection(StaticVariable.collectionTeacher)
+            .doc(teacherUid)
+            .get();
     }
 }
 
