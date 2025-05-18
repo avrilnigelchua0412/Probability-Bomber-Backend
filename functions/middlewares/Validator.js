@@ -1,26 +1,37 @@
+const JoiSchemas = require("./JoiSchemas");
+
 class Validator {
+    // Question
+    static validateCreateQuestion(req, res, next){
+        const { error, value } = JoiSchemas.createQuestionSchema.validate(req.body, { abortEarly: false })
+        if (error) {
+            return res.status(400).json({
+                error: error.details.map(detail => detail.message),
+            });
+        }
+        req.validatedBody = value;
+        next();
+    }
+
+    static validateEditQuestion(req, res, next){
+        const { error, value } = JoiSchemas.editQuestionSchema.validate(req.body, { abortEarly: false })
+        if (error) {
+            return res.status(400).json({
+                error: error.details.map(detail => detail.message),
+            });
+        }
+        req.validatedBody = value;
+        next();
+    }
+
+    // Authentication
     static validateUser(req, res, next) {
-        const { name, email, password, role } = req.body;
-        const missingFields = [];
-    
-        // Validate required fields
-        ['name', 'email', 'password', 'role'].forEach(field => {
-            if (!req.body[field] || req.body[field] === '') {
-                missingFields.push(field);
-            }
-        });
-    
-        if (missingFields.length > 0) {
-            return res.status(400).json({ error: `Missing required fields: ${missingFields.join(', ')}` });
+        const { error } = JoiSchemas.userSchema.validate(req.body, { abortEarly: false })
+        if (error) {
+            const messages = error.details.map(detail => detail.message);
+            return res.status(400).json({ error: messages });
         }
-    
-        // Validate role
-        const allowedRoles = ['teacher', 'student'];
-        if (!allowedRoles.includes(role)) {
-            return res.status(400).json({ error: `Invalid role. Allowed roles are: ${allowedRoles.join(', ')}` });
-        }
-    
-        next(); // All good, proceed
+        next();
     };
 }
 module.exports = Validator;

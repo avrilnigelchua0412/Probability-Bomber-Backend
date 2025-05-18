@@ -1,7 +1,6 @@
 const AuthService = require("../services/AuthService");
 const UserFactory = require('../factory/UserFactory');
 const UserRepository = require("../repositories/UserRepository");
-const Validator = require("../middlewares/Validator");
 const { FieldValue } = require("firebase-admin/firestore");
 
 class AuthController {

@@ -1,5 +1,6 @@
 const express = require("express");
 const QuestionController = require("../controllers/QuestionController");
+const Validator = require("../middlewares/Validator")
 
 class QuestionRoute {
     constructor() {
@@ -9,8 +10,8 @@ class QuestionRoute {
     registerRoutes() {
         this.router.get("/get_all_question", QuestionController.getAllQuestions)
 
-        this.router.post("/create_question", QuestionController.createQuestionForTheQuiz)
-        this.router.post("/edit_question", QuestionController.editQuestionOfTheQuiz)
+        this.router.post("/create_question", Validator.validateCreateQuestion, QuestionController.createQuestionForTheQuiz)
+        this.router.post("/edit_question", Validator.validateEditQuestion, QuestionController.editQuestionOfTheQuiz)
 
         this.router.post("/remove_all_question", QuestionController.removeAllQuestionOfTheQuiz)
         this.router.post("/remove_a_question", QuestionController.removeAQuestionOfAQuiz)

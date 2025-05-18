@@ -1,21 +1,17 @@
-const admin = require("firebase-admin");
+const FirebaseService = require("../config/FirebaseService");
 
 class Authenticator {
-    /**
-     * Middleware to authenticate Firebase ID token from Authorization header.
-     */
     static authenticate(req, res, next) {
         const authHeader = req.headers.authorization;
-
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
             return res.status(403).json({ error: "No token provided" });
         }
-
         const token = authHeader.split(" ")[1];
-
-        admin.auth().verifyIdToken(token)
+        FirebaseService.getAuth().verifyIdToken(token)
             .then(decodedToken => {
-                // console.log("Decoded Token: ", decodedToken)
+                if(req.body['role'] !== undefined){
+                    req.role = req.body['role']
+                }
                 req.uid = decodedToken.uid;  // Attach UID to request
                 req.token = token;           // Attach token to request
                 next();                      // Proceed

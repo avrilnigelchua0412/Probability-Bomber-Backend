@@ -1,0 +1,41 @@
+const Joi = require("joi");
+class JoiSchemas {
+    // Question
+    static createQuestionSchema = Joi.object({
+        questionName: Joi.string().required(),
+        questionDescription: Joi.string().required(),
+        numerator: Joi.number().required(),
+        denominator: Joi.number().required(),
+        probability: Joi.number().required(),
+        event: Joi.array().items(Joi.string()).required()
+    }).unknown(false);
+    
+    static editQuestionSchema = Joi.object({
+        questionName: Joi.string().optional(),
+        questionDescription: Joi.string().optional(),
+        numerator: Joi.number().optional(),
+        denominator: Joi.number().optional(),
+        probability: Joi.number().optional(),
+        event: Joi.array().items(Joi.string()).optional(),
+        createBy: Joi.string().optional(),
+        originalQuestionName: Joi.string().required()
+    }).unknown(false);
+
+    // Authentication
+    static userSchema = Joi.object({
+        name : Joi.string().required(),
+        email : Joi.string().email().required(),
+            password: Joi.string()
+        .min(8)
+        .max(128)
+        .pattern(new RegExp("^[a-zA-Z0-9!@#$%^&*()_+=-]*$")) // Optional: allows letters, numbers, symbols
+        .required()
+        .messages({
+            'string.min': 'Password must be at least 8 characters long',
+            'string.pattern.base': 'Password contains invalid characters'
+        }),
+        role : Joi.string().valid('teacher', 'student').required(),
+    }).unknown(false);
+}
+
+module.exports = JoiSchemas;

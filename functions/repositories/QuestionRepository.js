@@ -1,19 +1,28 @@
 const FirebaseService = require("../config/FirebaseService");
 const StaticVariable = require("../config/StaticVariable");
+const CreateQuestionDTO = require("../dto/CreateQuestionDTO");
+const EditQuestionDTO = require("../dto/EditQuestionDTO");
 const QuestionModel = require("../models/Question/QuestionModel");
 const QuizRepository = require("./QuizRepository");
+const UserRepository = require("./UserRepository");
 
 class QuestionRepository{
-    static async createQuestion(questionName, questionDescription, numerator, denominator, probability, event){
-        const questionRef = FirebaseService.getDB().collection(StaticVariable.collectionQuestion).doc();
-        const questionModel = new QuestionModel(questionRef.id, questionName, questionDescription, numerator, denominator, probability, event);
-        await questionRef.set(questionModel.toFirestore());
+    static async createQuestion(createQuestionDTO){
+        if(createQuestionDTO instanceof CreateQuestionDTO){
+            const questionRef = FirebaseService.getDB().collection(StaticVariable.collectionQuestion).doc();
+            createQuestionDTO.setQuestionId(questionRef.id);
+            const questionModel = createQuestionDTO.toQuestionModel()
+            await questionRef.set(questionModel.toFirestore());
+        }
     }
-    static async editQuestion(questionName, questionDescription, numerator, denominator, probability, event, originalQuestionName){
-        const questionId = await QuestionRepository.getQuestionIdByName(originalQuestionName);
-        const questionRef = await FirebaseService.getRef(StaticVariable.collectionQuestion, questionId);
-        const questionModel = new QuestionModel(questionRef.id, questionName, questionDescription, numerator, denominator, probability, event);
-        await questionRef.update(questionModel.toFirestore());
+    static async editQuestion(editQuestionDTO){
+        if(editQuestionDTO instanceof EditQuestionDTO){
+            const questionId = await QuestionRepository.getQuestionIdByName(editQuestionDTO.originalQuestionName);
+            editQuestionDTO.setQuestionId(questionId)
+            const questionRef = await FirebaseService.getRef(StaticVariable.collectionQuestion, questionId);
+            const questionModel = editQuestionDTO.toQuestionModel()
+            await questionRef.update(questionModel.toFirestore());
+        }
     }
     static async getQuestionDataByNameHelper(questionName){
         return await FirebaseService.getDB()
