@@ -17,7 +17,7 @@ class JoiSchemas {
         denominator: Joi.number().optional(),
         probability: Joi.number().optional(),
         event: Joi.array().items(Joi.string()).optional(),
-        createBy: Joi.string().optional(),
+        createdBy: Joi.string().optional(),
         originalQuestionName: Joi.string().required()
     }).unknown(false);
 
@@ -25,15 +25,15 @@ class JoiSchemas {
     static userSchema = Joi.object({
         name : Joi.string().required(),
         email : Joi.string().email().required(),
-            password: Joi.string()
-        .min(8)
-        .max(128)
-        .pattern(new RegExp("^[a-zA-Z0-9!@#$%^&*()_+=-]*$")) // Optional: allows letters, numbers, symbols
-        .required()
-        .messages({
-            'string.min': 'Password must be at least 8 characters long',
-            'string.pattern.base': 'Password contains invalid characters'
-        }),
+        password: Joi.string()
+            .min(8)
+            .max(128)
+            .pattern(new RegExp("^[a-zA-Z0-9!@#$%^&*()_+=-]*$")) // Optional: allows letters, numbers, symbols
+            .required()
+            .messages({
+                'string.min': 'Password must be at least 8 characters long',
+                'string.pattern.base': 'Password contains invalid characters'
+                }),
         role : Joi.string().valid('teacher', 'student').required(),
     }).unknown(false);
 }

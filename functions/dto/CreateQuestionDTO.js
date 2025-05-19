@@ -1,17 +1,17 @@
 const QuestionModel = require("../models/Question/QuestionModel");
 
 class CreateQuestionDTO {
-    constructor(questionName, questionDescription, numerator, denominator, probability, event = [],  createBy = null) {
+    constructor(questionName, questionDescription, numerator, denominator, probability, event = [],  createdBy = null) {
         this.questionName = questionName;
         this.questionDescription = questionDescription;
         this.numerator = numerator;
         this.denominator = denominator;
         this.probability = probability;
         this.event = event;
-        this.createBy = createBy;
+        this.createdBy = createdBy;
     }
     setTeacherName(teacherName){
-        this.createBy = teacherName;
+        this.createdBy = teacherName;
     }
     setQuestionId(questionId) {
         this.questionId = questionId;
@@ -20,7 +20,7 @@ class CreateQuestionDTO {
         return new QuestionModel(
             this.questionId,
             this.questionName,
-            this.createBy,
+            this.createdBy,
             this.questionDescription,
             this.numerator,
             this.denominator,
@@ -39,7 +39,7 @@ class CreateQuestionDTO {
             body.denominator,
             body.probability,
             Array.isArray(body.event) ? body.event : [],
-            body.createBy
+            body.createdBy
         );
     }
 }
