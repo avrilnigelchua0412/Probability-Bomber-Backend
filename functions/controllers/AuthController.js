@@ -7,11 +7,8 @@ class AuthController {
     static async register(req, res){
         try {
             const { name, email, password, role } = req.body;
-            console.log("Debug1: ", name, email, password, role)
             const createdAt = FieldValue.serverTimestamp();
-            console.log("Debug2: ", createdAt)
             const userRecord = await AuthService.registerUser(email, password);
-            console.log("Debug3: ", userRecord)
             const newUser = UserFactory.instantiateUser(userRecord.uid, name, email, createdAt, role);
             await UserRepository.createUser(userRecord.uid, newUser);
             res.status(201).send({ message: `${role} created successfully!` }); // 201 Created

@@ -1,16 +1,5 @@
-const HelperRepository = require("../repositories/HelperRepository");
-const QuizRepository = require("../repositories/QuizRepository");
+const CreateQuizDTO = require("../dto/CreateQuizDTO");
 const QuizService = require("../services/QuizService");
-
-/**
- * Implement: (Based on the Model Object's Fields)
- * Create Quiz
- * QuizName Edit
- * Add, Remove and Edit(?) Class ID should affect `classIds` and `studentScores`
- * Add and Remove Question
- * Add and Remove Students in `studentScores`
- * Add, Edit and Remove Scores in `studentScores`
- */
 
 class QuizController {
     static async getAllTheQuiz(req, res){
@@ -24,8 +13,8 @@ class QuizController {
     }
     static async createQuizForTheTeacher(req, res){
         try {
-            const { quizName } = req.body;
-            await QuizService.createQuizService(quizName, req.uid);
+            const createQuizDTO = CreateQuizDTO.fromRequestBody(req.body);
+            await QuizService.createQuizService(createQuizDTO, req.uid);
             res.status(200).json({ message: "Success!"});
         } catch (error) {
             console.error("Error creating quiz:", error);

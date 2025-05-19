@@ -21,6 +21,14 @@ class JoiSchemas {
         originalQuestionName: Joi.string().required()
     }).unknown(false);
 
+    // Quizzes
+    static createQuizSchema = Joi.object({
+        quizName: Joi.string().required(),
+        topic: Joi.string().required(),
+        level: Joi.number().positive().integer().required(),
+        duration: Joi.number().positive().required(),
+    }).unknown(false);
+
     // Authentication
     static userSchema = Joi.object({
         name : Joi.string().required(),

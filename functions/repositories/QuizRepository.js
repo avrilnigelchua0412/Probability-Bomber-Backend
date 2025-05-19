@@ -3,6 +3,7 @@ const StaticVariable = require("../config/StaticVariable");
 const ClassRepository = require("./ClassRepository");
 const QuizModel = require("../models/Quiz/QuizModel");
 const UserRepository = require("../repositories/UserRepository");
+const CreateQuizDTO = require("../dto/CreateQuizDTO");
 
 class QuizRepository{
     static async getQuizDataByNameHelper(quizName){
@@ -12,13 +13,17 @@ class QuizRepository{
             .limit(1)
             .get();
     }
-    static async createQuiz(quizName, teacherName){
-        const quizRef = FirebaseService
+    static async createQuiz(createQuizDTO, teacherName){
+        if(createQuizDTO instanceof CreateQuizDTO){
+            const quizRef = FirebaseService
             .getDB()
             .collection(StaticVariable.collectionQuiz)
             .doc();
-        const quizModel = new QuizModel(quizRef.id, quizName, teacherName);
-        await quizRef.set(quizModel.toFirestore());
+            createQuizDTO.setQuizId(quizRef.id);
+            createQuizDTO.setCreatedBy(teacherName)
+            const quizModel = createQuizDTO.toQuizModel()
+            await quizRef.set(quizModel.toFirestore());
+        }
     }
 
     static async deleteClassOnQuiz(quizId, classId) {
