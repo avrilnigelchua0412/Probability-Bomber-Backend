@@ -7,13 +7,14 @@ const authRoutes = require("../routes/AuthRoutes");
 const teacherRoutes = require("../routes/TeacherRoutes");
 const quizRoutes = require("../routes/QuizRoute");
 const questionRoutes = require("../routes/QuestionRoute");
+const ErrorHandler = require("../middlewares/ErrorHandler");
 
 class Application{
     constructor(){
         this.app = express();
         this.setupMiddleware();
         this.setupRoutes();
-        this.setupDefaultRoute();
+        this.setupErrorHandler();
     }
     setupMiddleware() {
         this.app.use(express.json());
@@ -40,10 +41,8 @@ class Application{
         this.app.use(StaticVariable.questionPath, questionRoutes);
     }
 
-    setupDefaultRoute() {
-        this.app.get(StaticVariable.pathDefault, (req, res) => {
-            res.status(200).send({ message: "Hello World" });
-        });
+    setupErrorHandler() {
+        this.app.use(ErrorHandler.errorHandler)
     } 
     
     getInstance() {

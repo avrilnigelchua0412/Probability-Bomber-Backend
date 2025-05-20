@@ -2,7 +2,7 @@ const QuestionModel = require("../models/Question/QuestionModel");
 
 class EditQuestionDTO {
     // questionName, questionDescription, numerator, denominator, probability, event, originalQuestionName
-    constructor(questionName, questionDescription, numerator, denominator, probability, event = [], originalQuestionName,  createBy) {
+    constructor(questionName, questionDescription, numerator, denominator, probability, event = [], originalQuestionName,  createdBy) {
         this.questionName = questionName;
         this.questionDescription = questionDescription;
         this.numerator = numerator;
@@ -10,7 +10,7 @@ class EditQuestionDTO {
         this.probability = probability;
         this.event = event;
         this.originalQuestionName = originalQuestionName;
-        this.createBy = createBy;
+        this.createdBy = createdBy;
     }
     setQuestionId(questionId) {
         this.questionId = questionId;
@@ -19,7 +19,7 @@ class EditQuestionDTO {
         return new QuestionModel(
             this.questionId,
             this.questionName,
-            this.createBy,
+            this.createdBy,
             this.questionDescription,
             this.numerator,
             this.denominator,
@@ -39,7 +39,7 @@ class EditQuestionDTO {
             body.probability,
             Array.isArray(body.event) ? body.event : [],
             body.originalQuestionName,
-            body.createBy
+            body.createdBy
         );
     }
 }
