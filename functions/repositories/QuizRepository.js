@@ -129,6 +129,15 @@ class QuizRepository{
         await quizRef.update({ studentInformation });
     }
 
+    static async editQuiz(editQuizDTO, quizId){
+        const quizRef = await FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
+        await quizRef.update({ 
+            topic: editQuizDTO.topic,  
+            level: editQuizDTO.level, 
+            duration: editQuizDTO.duration 
+        });
+    }
+
     static async getQuizSnapshot(){
         return await FirebaseService.getDB().collection(StaticVariable.collectionQuiz).get();
     }
