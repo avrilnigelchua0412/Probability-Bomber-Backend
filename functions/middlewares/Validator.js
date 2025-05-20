@@ -36,6 +36,17 @@ class Validator {
         next();
     }
 
+    static validateStudentInformation(req, res, next){
+        const { error, value } = JoiSchemas.studentInformationSchema.validate(req.body, { abortEarly: false })
+        if (error) {
+            return res.status(400).json({
+                error: error.details.map(detail => detail.message),
+            });
+        }
+        req.validatedBody = value;
+        next();
+    }
+
     // Authentication
     static validateUser(req, res, next) {
         const { error } = JoiSchemas.userSchema.validate(req.body, { abortEarly: false })

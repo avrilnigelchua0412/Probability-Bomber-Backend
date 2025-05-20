@@ -1,5 +1,6 @@
 const StaticVariable = require("../config/StaticVariable");
 const CreateQuizDTO = require("../dto/CreateQuizDTO");
+const StudentInformationDTO = require("../dto/StudentInformationDTO");
 const ClassRepository = require("../repositories/ClassRepository");
 const HelperRepository = require("../repositories/HelperRepository");
 const QuizRepository = require("../repositories/QuizRepository");
@@ -33,13 +34,23 @@ class QuizService {
         await QuizRepository.removeClassEntry(quizId, classId);
     }
 
-    static async updateStudentScoreService(quizName, className, studentName, score){
-        const {quizId, classId, studentUid } = await HelperRepository.getQuizIdClassIdStudentUid(quizName, className, studentName);
-        await QuizRepository.updateStudentScore(quizId, classId, studentUid, score)
+    static async updateStudentInformationService(studentInformationDTO){
+        if (studentInformationDTO instanceof StudentInformationDTO){
+            const { quizName, className, studentName } = studentInformationDTO.getInformationNames();
+            const {quizId, classId, studentUid } = await HelperRepository.getQuizIdClassIdStudentUid(quizName, className, studentName);
+            await QuizRepository.updateStudentInformation(quizId, classId, studentUid, studentInformationDTO.studentInformation);
+        } else {
+            throw new Error(`Invalid DTO instance received in updateStudentInformationService`);
+        }
     }
-    static async removeStudentScoreService(quizName, className, studentName){
-        const { quizId, classId, studentUid } = await HelperRepository.getQuizIdClassIdStudentUid(quizName, className, studentName);
-        await QuizRepository.removeStudentScore(quizId, classId, studentUid);
+    static async removeStudentInformationService(studentInformationDTO){
+        if (studentInformationDTO instanceof StudentInformationDTO){
+            const { quizName, className, studentName } = studentInformationDTO.getInformationNames();
+            const {quizId, classId, studentUid } = await HelperRepository.getQuizIdClassIdStudentUid(quizName, className, studentName);
+            await QuizRepository.removeStudentInformation(quizId, classId, studentUid);
+        } else {
+            throw new Error(`Invalid DTO instance received in removeStudentInformationService`);
+        }
     }
     static async getAllTheQuizService(){
         const snapshot = await QuizRepository.getQuizSnapshot();

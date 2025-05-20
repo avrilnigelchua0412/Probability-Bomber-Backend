@@ -91,34 +91,30 @@ class QuizRepository{
         return quizNameQuery.docs[0].id;
     }
 
-    // Update score of a student
-    static async updateStudentScore(quizId, classId, studentUid, score) {
-        const path = `studentScores.${classId}.${studentUid}`;
+    // Update information of a student
+    static async updateStudentInformation(quizId, classId, studentUid, studentInformation) {
+        const path = `studentInformation.${classId}.${studentUid}`;
         const quizRef = await FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
-        await quizRef.update({ [path]: score });
+        await quizRef.update({ [path]: studentInformation[`${classId}`][`${studentUid}`] });
     }
 
     // Add a new class score entry
     static async addClassEntry(quizId, classId) {
-        const path = `studentScores.${classId}`;
+        const path = `studentInformation.${classId}`;
         const quizRef = await FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
         await quizRef.update({ [path]: {} });
     }
 
-    // Remove a student's score
-    static async removeStudentScore(quizId, classId, studentUid) {
+    // Remove a student's information
+    static async removeStudentInformation(quizId, classId, studentUid) {
         const quizRef = await FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
         const docSnapshot = await quizRef.get();
         if (!docSnapshot.exists) throw new Error("Quiz not found.");
         const quizData = docSnapshot.data();
-        const studentScores = quizData.studentScores || {};
-        if (studentScores[classId]) {
-            delete studentScores[classId][studentUid];
-            // // Optional: clean up empty class entry
-            // if (Object.keys(studentScores[classId]).length === 0) {
-            //     delete studentScores[classId];
-            // }
-            await quizRef.update({ studentScores });
+        const studentInformation = quizData.studentInformation || {};
+        if (studentInformation[classId]) {
+            delete studentInformation[classId][studentUid];
+            await quizRef.update({ studentInformation });
         }
     }
 
@@ -128,9 +124,9 @@ class QuizRepository{
         const docSnapshot = await quizRef.get();
         if (!docSnapshot.exists) throw new Error("Quiz not found.");
         const quizData = docSnapshot.data();
-        const studentScores = quizData.studentScores || {};
-        delete studentScores[classId];
-        await quizRef.update({ studentScores });
+        const studentInformation = quizData.studentInformation || {};
+        delete studentInformation[classId];
+        await quizRef.update({ studentInformation });
     }
 
     static async getQuizSnapshot(){

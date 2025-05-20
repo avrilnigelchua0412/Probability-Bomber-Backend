@@ -1,4 +1,5 @@
 const CreateQuizDTO = require("../dto/CreateQuizDTO");
+const StudentInformationDTO = require("../dto/StudentInformationDTO");
 const QuizService = require("../services/QuizService");
 
 class QuizController {
@@ -44,21 +45,20 @@ class QuizController {
         }
     }
 
-
-    static async updateScoreOfTheStudent(req, res){
+    static async updateInformationOfTheStudent(req, res){
         try {
-            const { quizName, className, studentName, score } = req.body;
-            await QuizService.updateStudentScoreService(quizName, className, studentName, score);
+            const studentInformationDTO =  StudentInformationDTO.fromRequestBody(req.body);
+            await QuizService.updateStudentInformationService(studentInformationDTO);
             res.status(200).json({ message: 'Score updated successfully' });
         } catch (error) {
             console.error('Error updating score:', error);
             res.status(500).json({ error: 'Failed to update score'});
         }
     }
-    static async removeScoreOfTheStudent(req, res){
+    static async removeInformationOfTheStudent(req, res){
         try {
-            const { quizName, className, studentName } = req.body;
-            await QuizService.removeStudentScoreService(quizName, className, studentName);
+            const studentInformationDTO =  StudentInformationDTO.fromRequestBody(req.body);
+            await QuizService.removeStudentInformationService(studentInformationDTO);
             res.status(200).json({ message: 'Student score removed successfully' });
         } catch (error) {
             console.error("Error removing student score:", error);

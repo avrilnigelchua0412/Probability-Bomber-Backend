@@ -15,8 +15,8 @@ class QuizRoute {
         this.router.post("/add_class_quiz", QuizController.addClassInTheQuiz)
         this.router.post("/delete_class_quiz", QuizController.deleteClassInTheQuiz)
 
-        this.router.post("/update_score", QuizController.updateScoreOfTheStudent)
-        this.router.post("/remove_score", QuizController.removeScoreOfTheStudent)
+        this.router.post("/update_score", Validator.validateStudentInformation, QuizController.updateInformationOfTheStudent)
+        this.router.post("/remove_score", Validator.validateStudentInformation, QuizController.removeInformationOfTheStudent)
     }
     getRouter() {
         return this.router;

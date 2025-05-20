@@ -29,6 +29,25 @@ class JoiSchemas {
         duration: Joi.number().positive().required(),
     }).unknown(false);
 
+    static studentInformationSchema = Joi.object({
+        quizName: Joi.string().required(),
+        className: Joi.string().required(),
+        studentName: Joi.string().required(),
+        studentInformation: Joi.object()
+            .pattern(
+                Joi.string(), // classId
+                Joi.object().pattern(
+                    Joi.string(), // studentId
+                    Joi.object({
+                        score: Joi.number().optional(),
+                        timeCompletion: Joi.number().optional(),
+                        noAttempts: Joi.number().optional()
+                    })
+                )
+            )
+            .optional()
+    }).unknown(false);
+
     // Authentication
     static userSchema = Joi.object({
         name : Joi.string().required(),
