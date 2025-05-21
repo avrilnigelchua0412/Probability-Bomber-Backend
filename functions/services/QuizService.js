@@ -52,7 +52,7 @@ class QuizService {
         if (studentInformationDTO instanceof StudentInformationDTO){
             const { quizName, className, studentName } = studentInformationDTO.getInformationNames();
             const {quizId, classId, studentUid } = await HelperRepository.getQuizIdClassIdStudentUid(quizName, className, studentName);
-            await QuizRepository.updateStudentInformation(quizId, classId, studentUid, studentInformationDTO.studentInformation);
+            await QuizRepository.updateStudentInformation(quizId, classId, studentUid, studentInformationDTO);
         } else {
             throw new Error(`Invalid DTO instance received in updateStudentInformationService`);
         }
