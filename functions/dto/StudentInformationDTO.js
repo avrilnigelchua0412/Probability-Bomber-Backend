@@ -5,6 +5,12 @@ class StudentInformationDTO {
         this.studentName = studentName;
         this.studentInformation = studentInformation
     }
+    getClassName(){
+        return this.className;
+    }
+    getStudentName(){
+        return this.studentName;
+    }
     getInformationNames() {
         return {
             quizName: this.quizName,

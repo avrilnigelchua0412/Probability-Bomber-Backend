@@ -1,25 +1,17 @@
 const JoiSchemas = require("./JoiSchemas");
-
+const ValidationHandler = require("./ValidationHandler");
 class Validator {
     // Question
     static validateCreateQuestion(req, res, next){
         const { error, value } = JoiSchemas.createQuestionSchema.validate(req.body, { abortEarly: false })
-        if (error) {
-            return res.status(400).json({
-                error: error.details.map(detail => detail.message),
-            });
-        }
+        if (error) return ValidationHandler.handleValidationError(res, error);
         req.validatedBody = value;
         next();
     }
 
     static validateEditQuestion(req, res, next){
         const { error, value } = JoiSchemas.editQuestionSchema.validate(req.body, { abortEarly: false })
-        if (error) {
-            return res.status(400).json({
-                error: error.details.map(detail => detail.message),
-            });
-        }
+        if (error) return ValidationHandler.handleValidationError(res, error);
         req.validatedBody = value;
         next();
     }
@@ -27,22 +19,21 @@ class Validator {
     // Quiz
     static validateCreateQuiz(req, res, next){
         const { error, value } = JoiSchemas.createQuizSchema.validate(req.body, { abortEarly: false })
-        if (error) {
-            return res.status(400).json({
-                error: error.details.map(detail => detail.message),
-            });
-        }
+        if (error) return ValidationHandler.handleValidationError(res, error);
+        req.validatedBody = value;
+        next();
+    }
+
+    static validateEditQuiz(req, res, next){
+        const { error, value } = JoiSchemas.createQuizSchema.validate(req.body, { abortEarly: false })
+        if (error) return ValidationHandler.handleValidationError(res, error);
         req.validatedBody = value;
         next();
     }
 
     static validateStudentInformation(req, res, next){
         const { error, value } = JoiSchemas.studentInformationSchema.validate(req.body, { abortEarly: false })
-        if (error) {
-            return res.status(400).json({
-                error: error.details.map(detail => detail.message),
-            });
-        }
+        if (error) return ValidationHandler.handleValidationError(res, error);
         req.validatedBody = value;
         next();
     }
@@ -50,10 +41,7 @@ class Validator {
     // Authentication
     static validateUser(req, res, next) {
         const { error } = JoiSchemas.userSchema.validate(req.body, { abortEarly: false })
-        if (error) {
-            const messages = error.details.map(detail => detail.message);
-            return res.status(400).json({ error: messages });
-        }
+        if (error) return ValidationHandler.handleValidationError(res, error);
         next();
     };
 }

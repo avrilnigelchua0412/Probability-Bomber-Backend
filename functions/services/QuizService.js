@@ -1,5 +1,6 @@
 const StaticVariable = require("../config/StaticVariable");
 const CreateQuizDTO = require("../dto/CreateQuizDTO");
+const EditQuizDTO = require("../dto/EditQuizDTO");
 const StudentInformationDTO = require("../dto/StudentInformationDTO");
 const ClassRepository = require("../repositories/ClassRepository");
 const HelperRepository = require("../repositories/HelperRepository");
@@ -20,6 +21,19 @@ class QuizService {
         throw new Error(`Invalid DTO instance received in createQuizService`);
     }
 
+    static async editQuizService(editQuizDTO){
+        if(editQuizDTO instanceof EditQuizDTO){
+            const quizNameQuery = await QuizRepository.getQuizDataByNameHelper(editQuizDTO.quizName);
+            if (quizNameQuery.empty) {
+                throw new Error("Quiz Name does not exists.");
+            }
+            const quizId = await QuizRepository.getQuizIdByName(editQuizDTO.quizName);
+            await QuizRepository.editQuiz(editQuizDTO, quizId)
+        } else {
+            throw new Error(`Invalid DTO instance received in editQuizService`);
+        }
+    }
+
     static async addClassOnQuizService(quizName, className){
         const quizId = await QuizRepository.getQuizIdByName(quizName);
         const classId = await ClassRepository.getClassIdByName(className);
@@ -38,7 +52,7 @@ class QuizService {
         if (studentInformationDTO instanceof StudentInformationDTO){
             const { quizName, className, studentName } = studentInformationDTO.getInformationNames();
             const {quizId, classId, studentUid } = await HelperRepository.getQuizIdClassIdStudentUid(quizName, className, studentName);
-            await QuizRepository.updateStudentInformation(quizId, classId, studentUid, studentInformationDTO.studentInformation);
+            await QuizRepository.updateStudentInformation(quizId, classId, studentUid, studentInformationDTO);
         } else {
             throw new Error(`Invalid DTO instance received in updateStudentInformationService`);
         }

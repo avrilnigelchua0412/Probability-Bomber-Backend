@@ -92,10 +92,11 @@ class QuizRepository{
     }
 
     // Update information of a student
-    static async updateStudentInformation(quizId, classId, studentUid, studentInformation) {
+    static async updateStudentInformation(quizId, classId, studentUid, studentInformationDTO) {
+        const studentInformation = studentInformationDTO.studentInformation
         const path = `studentInformation.${classId}.${studentUid}`;
         const quizRef = await FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
-        await quizRef.update({ [path]: studentInformation[`${classId}`][`${studentUid}`] });
+        await quizRef.update({ [path]: studentInformation[studentInformationDTO.getClassName()][studentInformationDTO.getStudentName()] });
     }
 
     // Add a new class score entry
@@ -127,6 +128,15 @@ class QuizRepository{
         const studentInformation = quizData.studentInformation || {};
         delete studentInformation[classId];
         await quizRef.update({ studentInformation });
+    }
+
+    static async editQuiz(editQuizDTO, quizId){
+        const quizRef = await FirebaseService.getRef(StaticVariable.collectionQuiz, quizId);
+        await quizRef.update({ 
+            topic: editQuizDTO.topic,  
+            level: editQuizDTO.level, 
+            duration: editQuizDTO.duration 
+        });
     }
 
     static async getQuizSnapshot(){

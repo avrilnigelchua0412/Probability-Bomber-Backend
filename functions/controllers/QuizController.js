@@ -1,4 +1,5 @@
 const CreateQuizDTO = require("../dto/CreateQuizDTO");
+const EditQuizDTO = require("../dto/EditQuizDTO");
 const StudentInformationDTO = require("../dto/StudentInformationDTO");
 const QuizService = require("../services/QuizService");
 
@@ -14,12 +15,22 @@ class QuizController {
     }
     static async createQuizForTheTeacher(req, res){
         try {
-            const createQuizDTO = CreateQuizDTO.fromRequestBody(req.body);
+            const createQuizDTO = CreateQuizDTO.fromRequestBody(req.validatedBody);
             await QuizService.createQuizService(createQuizDTO, req.uid);
             res.status(200).json({ message: "Success!"});
         } catch (error) {
             console.error("Error creating quiz:", error);
             res.status(500).json({ error: "Failed to create quiz."});
+        }
+    }
+    static async editQuizForTheTeacher(req, res){
+        try {
+            const editQuizDTO = EditQuizDTO.fromRequestBody(req.validatedBody);
+            await QuizService.editQuizService(editQuizDTO)
+            res.status(200).json({ message: "Success!"});
+        } catch (error) {
+            console.error("Error editing quiz:", error);
+            res.status(500).json({ error: "Failed to edit quiz."});
         }
     }
 
@@ -47,7 +58,7 @@ class QuizController {
 
     static async updateInformationOfTheStudent(req, res){
         try {
-            const studentInformationDTO =  StudentInformationDTO.fromRequestBody(req.body);
+            const studentInformationDTO =  StudentInformationDTO.fromRequestBody(req.validatedBody);
             await QuizService.updateStudentInformationService(studentInformationDTO);
             res.status(200).json({ message: 'Score updated successfully' });
         } catch (error) {
@@ -57,7 +68,7 @@ class QuizController {
     }
     static async removeInformationOfTheStudent(req, res){
         try {
-            const studentInformationDTO =  StudentInformationDTO.fromRequestBody(req.body);
+            const studentInformationDTO =  StudentInformationDTO.fromRequestBody(req.validatedBody);
             await QuizService.removeStudentInformationService(studentInformationDTO);
             res.status(200).json({ message: 'Student score removed successfully' });
         } catch (error) {

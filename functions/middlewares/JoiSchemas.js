@@ -29,6 +29,13 @@ class JoiSchemas {
         duration: Joi.number().positive().required(),
     }).unknown(false);
 
+    static editQuizSchema = Joi.object({
+        quizName: Joi.string().required(),
+        topic: Joi.string().required(),
+        level: Joi.number().positive().integer().required(),
+        duration: Joi.number().positive().required(),
+    }).unknown(false);
+
     static studentInformationSchema = Joi.object({
         quizName: Joi.string().required(),
         className: Joi.string().required(),
@@ -55,10 +62,11 @@ class JoiSchemas {
         password: Joi.string()
             .min(8)
             .max(128)
-            .pattern(new RegExp("^[a-zA-Z0-9!@#$%^&*()_+=-]*$")) // Optional: allows letters, numbers, symbols
+            .pattern(new RegExp("^[a-zA-Z0-9!@#$%^&*()_+=-]*$"))
             .required()
             .messages({
                 'string.min': 'Password must be at least 8 characters long',
+                'string.max': 'Password must not exceed 128 characters',
                 'string.pattern.base': 'Password contains invalid characters'
                 }),
         role : Joi.string().valid('teacher', 'student').required(),
