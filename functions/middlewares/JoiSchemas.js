@@ -6,7 +6,7 @@ class JoiSchemas {
         questionDescription: Joi.string().required(),
         numerator: Joi.number().required(),
         denominator: Joi.number().required(),
-        probability: Joi.number().required(),
+        probability: Joi.string().required(),
         event: Joi.array().items(Joi.string()).required()
     }).unknown(false);
     
@@ -15,7 +15,7 @@ class JoiSchemas {
         questionDescription: Joi.string().optional(),
         numerator: Joi.number().optional(),
         denominator: Joi.number().optional(),
-        probability: Joi.number().optional(),
+        probability: Joi.string().optional(),
         event: Joi.array().items(Joi.string()).optional(),
         createdBy: Joi.string().optional(),
         originalQuestionName: Joi.string().required()
