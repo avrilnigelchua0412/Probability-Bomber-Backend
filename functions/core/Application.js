@@ -7,6 +7,7 @@ const authRoutes = require("../routes/AuthRoutes");
 const teacherRoutes = require("../routes/TeacherRoutes");
 const quizRoutes = require("../routes/QuizRoute");
 const questionRoutes = require("../routes/QuestionRoute");
+const studentRoutes = require("../routes/StudentRoutes");
 const ErrorHandler = require("../middlewares/ErrorHandler");
 
 class Application{
@@ -39,6 +40,7 @@ class Application{
         this.app.use(StaticVariable.teacherPath, teacherRoutes);
         this.app.use(StaticVariable.quizPath, quizRoutes);
         this.app.use(StaticVariable.questionPath, questionRoutes);
+        this.app.use(StaticVariable.studentPath, studentRoutes);
     }
 
     setupErrorHandler() {

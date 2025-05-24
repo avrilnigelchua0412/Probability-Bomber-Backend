@@ -40,5 +40,20 @@ class StudentRepository {
         const studentData = await UserRepository.getUserData(studentUid, StaticVariable.studentRole);
         return studentData.classId == null ? false : true
     }
+
+    static async addAchievements(studentUid, achievement) {
+        const studentRef = await UserRepository.getUserDocument(studentUid, StaticVariable.studentRole);
+        const studentSnapshot = await studentRef.get();
+        const achievements = studentSnapshot.data().achievements || [];
+        achievements.push(...achievement);
+        await studentRef.update({ achievements });
+    }
+
+    static async getStudentAchievements(studentUid) {
+        const studentRef = await UserRepository.getUserDocument(studentUid, StaticVariable.studentRole);
+        const studentSnapshot = await studentRef.get();
+        const achievements = studentSnapshot.data().achievements || [];
+        return achievements;
+    }
 }
 module.exports = StudentRepository;

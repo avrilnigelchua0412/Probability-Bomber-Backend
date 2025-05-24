@@ -1,9 +1,10 @@
 const UserModel = require("./UserModel");
 
 class StudentModel extends UserModel {
-    constructor(uid, name, email, createdAt, classId = null) {
+    constructor(uid, name, email, createdAt, classId = null, achievements = []) {
         super(uid, name, email, createdAt, 'student');
         this.classId = classId; // ID of the class the student is in
+        this.achievements = achievements
     }
 
     assignClass(classId) {
@@ -13,7 +14,8 @@ class StudentModel extends UserModel {
     toFirestore() {
         return {
             ...super.toFirestore(),
-            classId: this.classId
+            classId: this.classId,
+            achievements: this.achievements
         };
     }
 }
