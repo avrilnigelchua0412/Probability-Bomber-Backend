@@ -8,9 +8,10 @@ class StudentRoutes {
         this.registerRoutes();
     }
     registerRoutes(){
-        this.router.post("/add_achivements", Validator.validateAddStudentAchievements, StudentController.addStudentAchievements);
-        this.router.get("/get_achivements", Validator.validateGetStudentAchievements, StudentController.getStudentAchievements);
-    }  
+        this.router.post("/add_achievements", Validator.validateAddStudentAchievements, StudentController.addStudentAchievements);
+        this.router.get("/get_achievements", StudentController.getStudentAchievements);
+        this.router.get("/get_student_class", StudentController.getStudentClass);
+    }
     getRouter() {
         return this.router;
     }

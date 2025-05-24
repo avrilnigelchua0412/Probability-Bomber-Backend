@@ -4,6 +4,16 @@ const StudentInformationDTO = require("../dto/StudentInformationDTO");
 const QuizService = require("../services/QuizService");
 
 class QuizController {
+    static async getAllQuizInformation(req, res){
+        try {
+            const { quizName } = req.body;
+            const allQuizInformation = await QuizService.getAllQuizInformationService(quizName)
+            res.status(200).json({ allQuizInformation });
+        } catch (error) {
+            console.error("Error getting all information:", error);
+            res.status(500).json({ error: "Failed to get all information."});
+        }
+    }
     static async getAllTheQuiz(req, res){
         try {
             const allQuizzes = await QuizService.getAllTheQuizService()

@@ -55,5 +55,11 @@ class StudentRepository {
         const achievements = studentSnapshot.data().achievements || [];
         return achievements;
     }
+    static async getStudentClassName(studentUid) {
+        const studentRef = await UserRepository.getUserDocument(studentUid, StaticVariable.studentRole);
+        const studentSnapshot = await studentRef.get();
+        const className = studentSnapshot.data().className || "No class assigned";
+        return className;
+    }
 }
 module.exports = StudentRepository;

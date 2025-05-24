@@ -2,6 +2,7 @@ const StaticVariable = require("../config/StaticVariable");
 const CreateQuizDTO = require("../dto/CreateQuizDTO");
 const EditQuizDTO = require("../dto/EditQuizDTO");
 const StudentInformationDTO = require("../dto/StudentInformationDTO");
+const StudentInformationHelper = require("../dto/StudentInformationHelper");
 const ClassRepository = require("../repositories/ClassRepository");
 const HelperRepository = require("../repositories/HelperRepository");
 const QuizRepository = require("../repositories/QuizRepository");
@@ -71,6 +72,23 @@ class QuizService {
         return await Promise.all(
             snapshot.docs.map(async (doc) => doc.data())
         );
+    }
+    static async getAllQuizInformationService(quizName){
+        const studentInformations =  await QuizRepository.getQuizInformation(quizName);
+        const data = {}
+        for (const [classId, students] of Object.entries(studentInformations)) {
+            const classData = await ClassRepository.getClassData(classId);
+            for (const [studentId, studentInformation] of Object.entries(students)) {
+                const studentData = await UserRepository.getUserData(studentId, StaticVariable.studentRole);
+                if (!data[classData.className]) {
+                    data[classData.className] = [];
+                }
+                data[classData.className].push({
+                    [studentData.name]: studentInformation
+                });
+            }
+        }
+        return data;
     }
 }
 module.exports = QuizService;

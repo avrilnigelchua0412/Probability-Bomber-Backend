@@ -1,13 +1,15 @@
+const StaticVariable = require("../config/StaticVariable");
 const StudentRepository = require("../repositories/StudentRepository");
 
 class StudentService {
-    static async addStudentAchievementsService(studentName, achievement) {
-        const studentUid = await StudentRepository.findStudentUidByEmailOrUsername(studentName);
+    static async addStudentAchievementsService(studentUid, achievement) {
         await StudentRepository.addAchievements(studentUid, achievement);
     }
-    static async getStudentAchievementsService(studentName) {
-        const studentUid = await StudentRepository.findStudentUidByEmailOrUsername(studentName);
+    static async getStudentAchievementsService(studentUid) {
         return await StudentRepository.getStudentAchievements(studentUid);
+    }
+    static async getStudentClassNameService(studentUid) {
+        return await StudentRepository.getStudentClassName(studentUid);
     }
 }
 module.exports = StudentService;
