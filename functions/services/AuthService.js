@@ -4,7 +4,6 @@ class AuthService {
         try {
             const auth = firebaseService.getAuth();
             const user = await auth.createUser({ email, password });
-            console.log("User created:", user.uid);
             return user;
         } catch (error) {
             console.error("registerUser error:", error);

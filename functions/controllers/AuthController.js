@@ -2,13 +2,17 @@ const AuthService = require("../services/AuthService");
 const UserFactory = require('../factory/UserFactory');
 const UserRepository = require("../repositories/UserRepository");
 const { FieldValue } = require("firebase-admin/firestore");
-
+const FirebaseService = require("../config/FirebaseService");
+const EmailService = require("../services/EmailService")
 class AuthController {
     static async register(req, res){
         try {
             const { name, email, password, role } = req.body;
+
             const createdAt = FieldValue.serverTimestamp();
+            
             const userRecord = await AuthService.registerUser(email, password);
+            
             const newUser = UserFactory.instantiateUser(userRecord.uid, name, email, createdAt, role);
             console.log(name, email, password, role);
             await UserRepository.createUser(userRecord.uid, newUser);

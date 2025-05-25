@@ -38,6 +38,14 @@ class Validator {
         next();
     }
 
+    // Student
+    static validateAddStudentAchievements(req, res, next) {
+        const { error, value } = JoiSchemas.addStudentAchievementsSchema.validate(req.body, { abortEarly: false });
+        if (error) return ValidationHandler.handleValidationError(res, error);
+        req.validatedBody = value;
+        next();
+    }
+
     // Authentication
     static validateUser(req, res, next) {
         const { error } = JoiSchemas.userSchema.validate(req.body, { abortEarly: false })

@@ -142,6 +142,14 @@ class QuizRepository{
     static async getQuizSnapshot(){
         return await FirebaseService.getDB().collection(StaticVariable.collectionQuiz).get();
     }
+    static async getQuizInformation(quizName) {
+        const quizRef = await QuizRepository.getQuizDataByNameHelper(quizName);
+        if (quizRef.empty) throw new Error("Quiz not found.");
+        const quizId = quizRef.docs[0].id;
+        const quizData = await FirebaseService.getRef(StaticVariable.collectionQuiz, quizId)
+        const getQuizSnapshot = await quizData.get();
+        return getQuizSnapshot.data().studentInformation || {};
+    }
 }
 
 module.exports = QuizRepository;

@@ -54,6 +54,11 @@ class JoiSchemas {
             )
             .optional()
     }).unknown(false);
+    
+    // Student
+    static addStudentAchievementsSchema = Joi.object({
+        achievement: Joi.array().items(Joi.string()).required()
+    }).unknown(false);
 
     // Authentication
     static userSchema = Joi.object({
