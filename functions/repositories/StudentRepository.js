@@ -1,6 +1,7 @@
 const FirebaseService = require("../config/FirebaseService");
 const StaticVariable = require("../config/StaticVariable");
 const UserRepository = require("./UserRepository");
+const ClassRepository = require("./ClassRepository");
 const admin = require("firebase-admin");
 
 class StudentRepository {
@@ -58,8 +59,9 @@ class StudentRepository {
     static async getStudentClassName(studentUid) {
         const studentRef = await UserRepository.getUserDocument(studentUid, StaticVariable.studentRole);
         const studentSnapshot = await studentRef.get();
-        const className = studentSnapshot.data().className || "No class assigned";
-        return className;
+        const classId = studentSnapshot.data().classId;
+        const classData = await ClassRepository.getClassData(classId);
+        return classData.className || "No class assigned";
     }
 }
 module.exports = StudentRepository;
