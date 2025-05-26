@@ -10,8 +10,10 @@ class Authenticator {
         FirebaseService.getAuth().verifyIdToken(token)
             .then(decodedToken => {
                 if(req.body['role'] !== undefined){
-                    req.role = req.body['role']
+                    req.role = req.body['role'];
+                    console.log("Body: ", req.body);
                 }
+                
                 req.uid = decodedToken.uid;  // Attach UID to request
                 req.token = token;           // Attach token to request
                 next();                      // Proceed

@@ -29,6 +29,15 @@ class StudentController {
             res.status(500).json({ error: "Failed to get class name." });
         }
     }
+    static async getStudentInformation(req, res) {
+        try {
+            const studentInformation = await StudentService.getStudentInformationService( req.uid );
+            res.status(200).json({ studentInformation });
+        } catch (error) {
+            console.error("Error getting class name:", error);
+            res.status(500).json({ error: "Failed to get class name." });
+        }
+    }
 }
 
 module.exports = StudentController;
