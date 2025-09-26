@@ -62,7 +62,8 @@ class JoiSchemas {
 
     // Authentication
     static userSchema = Joi.object({
-        name : Joi.string().required(),
+        fullname : Joi.string().required(),
+        username : Joi.string().required(),
         email : Joi.string().email().required(),
         password: Joi.string()
             .min(8)
@@ -73,8 +74,16 @@ class JoiSchemas {
                 'string.min': 'Password must be at least 8 characters long',
                 'string.max': 'Password must not exceed 128 characters',
                 'string.pattern.base': 'Password contains invalid characters'
-                }),
-        role : Joi.string().valid('teacher', 'student').required(),
+            }),
+        confirm_password: Joi.string()
+            .valid(Joi.ref('password'))
+            .required()
+            .strip()
+            .messages({
+                'any.only': 'Passwords do not match',
+                'any.required': 'Confirm password is required'
+            })
+        // role : Joi.string().valid('teacher', 'student').required(),
     }).unknown(false);
 }
 

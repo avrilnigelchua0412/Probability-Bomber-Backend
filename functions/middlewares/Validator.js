@@ -48,7 +48,10 @@ class Validator {
 
     // Authentication
     static validateUser(req, res, next) {
-        const { error } = JoiSchemas.userSchema.validate(req.body, { abortEarly: false })
+        const { error } = JoiSchemas.userSchema.validate(req.body, { 
+            abortEarly: false,
+            stripUnknown: true   // 👈 removes fields not in schema
+            });
         if (error) return ValidationHandler.handleValidationError(res, error);
         next();
     };

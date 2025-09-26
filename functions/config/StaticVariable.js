@@ -14,7 +14,7 @@ class StaticVariable{
     static questionPath = "/api/question";
     static studentPath = "/api/student";
 
-    static teacherRole = "teacher";
+    // static teacherRole = "teacher";
     static studentRole = "student";
 
     static collectionClass = "classes";
