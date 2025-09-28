@@ -85,6 +85,13 @@ class JoiSchemas {
             })
         // role : Joi.string().valid('teacher', 'student').required(),
     }).unknown(false);
+
+    // Stage
+    static addStageInformationSchema = Joi.object({
+        score: Joi.number().required(),
+        duration: Joi.number().required(),
+        numberOfStars: Joi.number().required()
+    }).unknown(false);
 }
 
 module.exports = JoiSchemas;

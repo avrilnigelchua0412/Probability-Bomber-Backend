@@ -55,5 +55,13 @@ class Validator {
         if (error) return ValidationHandler.handleValidationError(res, error);
         next();
     };
+
+    // Stage
+    static validateAddStageInformation(req, res, next) {
+        const { error, value } = JoiSchemas.addStageInformationSchema.validate(req.body, { abortEarly: false });
+        if (error) return ValidationHandler.handleValidationError(res, error);
+        req.validatedBody = value;
+        next();
+    }
 }
 module.exports = Validator;

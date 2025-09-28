@@ -31,7 +31,7 @@ class AuthController {
             // const userData = await UserRepository.getUserData(req.uid, role);
             const userData = await UserRepository.getUserData(req.uid);
             console.log("Backend Token: ", req.token);
-            console.log("Role: ", req.role);
+            console.log("Username: ", userData.username);
             res.status(200).json({ message: "Login successful", userData: userData });
         } catch (error) {
             res.status(500).json({ error: error.message });
