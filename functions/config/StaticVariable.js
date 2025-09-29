@@ -14,6 +14,7 @@ class StaticVariable{
     static questionPath = "/api/question";
     static studentPath = "/api/student";
     static stagePath = "/api/stage";
+    static achievementPath = "/api/achievement";
 
     // static teacherRole = "teacher";
     static studentRole = "student";
@@ -23,6 +24,7 @@ class StaticVariable{
     static collectionQuiz = "quizzes";
     static collectionTeacher = "teachers";
     static collectionStage = "stages";
+    static collectionAchievement = "achievements";
 
     static corsHeader = ["Authorization", "Content-Type"];
     static corsMethod = ["GET", "POST", "PUT", "DELETE"];
