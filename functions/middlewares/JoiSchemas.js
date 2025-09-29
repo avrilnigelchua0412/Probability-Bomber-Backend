@@ -88,6 +88,7 @@ class JoiSchemas {
 
     // Stage
     static addStageInformationSchema = Joi.object({
+        stageNumber: Joi.number().valid(1, 2, 3).required(),
         score: Joi.number().required(),
         duration: Joi.number().required(),
         numberOfStars: Joi.number().required()
