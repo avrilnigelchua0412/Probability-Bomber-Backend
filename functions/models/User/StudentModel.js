@@ -1,8 +1,8 @@
 const UserModel = require("./UserModel");
 
 class StudentModel extends UserModel {
-    constructor(uid, name, email, createdAt, classId = null, achievements = []) {
-        super(uid, name, email, createdAt, 'student');
+    constructor(uid, fullname, username, email, createdAt, classId = null, achievements = []) {
+        super(uid, fullname, username, email, createdAt);
         this.classId = classId; // ID of the class the student is in
         this.achievements = achievements
     }
