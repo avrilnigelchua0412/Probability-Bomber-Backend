@@ -10,6 +10,7 @@ const questionRoutes = require("../routes/QuestionRoute");
 const studentRoutes = require("../routes/StudentRoutes");
 const stageRoutes = require("../routes/StageRoute");
 const achievementRoutes = require("../routes/AchievementRoute");
+const emailRoutes = require("../routes/EmailRoute");
 const ErrorHandler = require("../middlewares/ErrorHandler");
 
 class Application{
@@ -45,6 +46,7 @@ class Application{
         this.app.use(StaticVariable.studentPath, studentRoutes);
         this.app.use(StaticVariable.stagePath, stageRoutes);
         this.app.use(StaticVariable.achievementPath, achievementRoutes);
+        this.app.use("/api/email", emailRoutes);
     }
 
     setupErrorHandler() {
