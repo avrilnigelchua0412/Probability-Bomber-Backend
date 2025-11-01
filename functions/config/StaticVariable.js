@@ -27,8 +27,11 @@ class StaticVariable{
     static collectionAchievement = "achievements";
 
     static corsHeader = ["Authorization", "Content-Type"];
-    static corsMethod = ["GET", "POST", "PUT", "DELETE"];
-    static corsOrigin = "*";
+    static corsMethod = ["GET", "POST", "PUT", "DELETE","OPTIONS"];
+    static corsOrigin = [
+        "http://localhost:5173", // Local dev frontend
+        "https://probabilitybomberfrontend.onrender.com" // Replace with your actual deployed frontend URL
+    ];
 
     static databaseURL = "https://fir-crud-restapi-6a058-default-rtdb.asia-southeast1.firebasedatabase.app";
 }

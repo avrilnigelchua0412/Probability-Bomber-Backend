@@ -1,5 +1,5 @@
 const admin = require("firebase-admin");
-const serviceAccount = require("../../firebase-key/permissions.json");
+const serviceAccount = require("./permissions.json");
 const StaticVariable = require("./StaticVariable")
 
 class FirebaseService {

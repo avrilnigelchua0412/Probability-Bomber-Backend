@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const StaticVariable = require('../config/StaticVariable');
-const Authenticator = require("../middlewares/AuthMiddleware");
+const Authenticator = require("../middlewares/authMiddleware");
 const userRoutes = require("../routes/UserRoutes");
 const authRoutes = require("../routes/AuthRoutes"); 
 const teacherRoutes = require("../routes/TeacherRoutes");
@@ -23,11 +23,19 @@ class Application{
     setupMiddleware() {
         this.app.use(express.json());
 
-        this.app.use(cors({
+        /*this.app.use(cors({
             origin: StaticVariable.corsOrigin,
             methods: StaticVariable.corsMethod,
-            allowedHeaders: StaticVariable.corsHeader
+            allowedHeaders: StaticVariable.corsHeader,
+            credentials: true
         }));
+
+        this.app.options("/*", cors({
+            origin: StaticVariable.corsOrigin,
+            methods: StaticVariable.corsMethod,
+            allowedHeaders: StaticVariable.corsHeader,
+            credentials: true
+        }));*/
 
         this.app.use((req, res, next) => {
             console.log("Path: ", req.path)
